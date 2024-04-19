@@ -92,17 +92,15 @@ export interface ApplicationCommandOptionAutocompleteMixin {
   autocomplete?: boolean;
 }
 
-export interface SubCommandOptionAPI extends ApplicationCommandOptionBase {
+export interface SubCommandOptionAPI<P = ApplicationCommandSimpleOptionAPI[]>
+  extends ApplicationCommandOptionBase {
   type: ApplicationCommandOptionType.SubCommand;
-  options?: Exclude<
-    ApplicationCommandOptionAPI,
-    SubCommandOptionAPI | SubCommandGroupOptionAPI
-  >[];
+  options: P;
 }
 
 export interface SubCommandGroupOptionAPI extends ApplicationCommandOptionBase {
   type: ApplicationCommandOptionType.SubCommandGroup;
-  options?: SubCommandOptionAPI[];
+  options?: SubCommandOptionAPI<any>[];
 }
 
 export interface StringOptionAPI
@@ -132,6 +130,7 @@ export interface UserOptionAPI extends ApplicationCommandSimpleOptionBase {
 }
 
 export interface ChannelOptionAPI extends ApplicationCommandSimpleOptionBase {
+  type: ApplicationCommandOptionType.Channel;
   channel_types?: ChannelType[];
 }
 
@@ -159,7 +158,7 @@ export interface AttachmentOptionAPI
 }
 
 export type ApplicationCommandOptionAPI =
-  | SubCommandOptionAPI
+  | SubCommandOptionAPI<any>
   | SubCommandGroupOptionAPI
   | StringOptionAPI
   | IntegerOptionAPI
@@ -170,3 +169,8 @@ export type ApplicationCommandOptionAPI =
   | MentionableOptionAPI
   | NumberOptionAPI
   | AttachmentOptionAPI;
+
+export type ApplicationCommandSimpleOptionAPI = Exclude<
+  ApplicationCommandOptionAPI,
+  SubCommandOptionAPI<any> | SubCommandGroupOptionAPI
+>;

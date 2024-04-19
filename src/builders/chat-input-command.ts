@@ -1,14 +1,16 @@
 import {
   ApplicationCommandType,
   type ApplicationChatInputCommandOptions,
-  type ApplicationCommandOptionAPI,
+  type ApplicationCommandSimpleOptionAPI,
   type InteractionContextType,
   type SubCommandGroupOptionAPI,
   type SubCommandOptionAPI,
 } from "types";
+import type { Handler } from "types/handler";
 import { ApplicationCommand } from "./command";
+import type { ApplicationCommandOption } from "./command-option";
+import { SubCommandOption } from "./options/sub-command";
 import { SubCommandGroupOption } from "./options/sub-command-group";
-import { SubCommandOption } from "./options/sub-command-option";
 
 export type ApplicationChatInputCommandOptionsOnly = Omit<
   ApplicationChatInputCommand,
@@ -30,7 +32,7 @@ export class ApplicationChatInputCommand extends ApplicationCommand {
   public nsfw?: boolean;
   public contexts?: InteractionContextType[];
 
-  public readonly options = new Map<string, ApplicationCommandOptionAPI>();
+  public readonly options = new Map<string, ApplicationCommandOption>();
 
   constructor(options: Omit<ApplicationChatInputCommandOptions, "type">) {
     super({ type: ApplicationCommandType.ChatInput, name: options.name });
@@ -41,12 +43,15 @@ export class ApplicationChatInputCommand extends ApplicationCommand {
     this.contexts = options.contexts;
   }
 
-  addSubCommand(
-    options: Omit<SubCommandOptionAPI, "type">
+  addSubCommand<T extends ApplicationCommandSimpleOptionAPI[]>(
+    options: Omit<SubCommandOptionAPI<T>, "type">,
+    handler: Handler<T>
   ): ApplicationChatInputCommandSubCommandsOnly {
     const option = new SubCommandOption(options, (g) => g);
 
     this.options.set(option.name, option);
+
+    console.log("HANDLER", handler);
 
     return this;
   }

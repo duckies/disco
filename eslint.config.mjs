@@ -21,6 +21,15 @@ export default ts.config(
       "@typescript-eslint/no-explicit-any": ["off"],
       "@typescript-eslint/no-empty-interface": ["off"],
       "@typescript-eslint/no-empty-function": ["off"],
+      "@typescript-eslint/ban-types": [
+        "error",
+        {
+          types: {
+            "{}": false,
+          },
+          extendDefaults: true,
+        },
+      ],
     },
   },
   {
