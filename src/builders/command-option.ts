@@ -1,7 +1,7 @@
 import type {
   ApplicationCommandOptionAPI,
   ApplicationCommandOptionType,
-  ApplicationCommandSimpleOptionBase,
+  ApplicationCommandSimpleOptionAPI,
 } from "types";
 
 export class ApplicationCommandOption {
@@ -23,7 +23,7 @@ export class ApplicationCommandOption {
 export class ApplicationCommandSimpleOption extends ApplicationCommandOption {
   public readonly required?: boolean;
 
-  constructor(options: ApplicationCommandSimpleOptionBase) {
+  constructor(options: ApplicationCommandSimpleOptionAPI) {
     super(options);
   }
 }

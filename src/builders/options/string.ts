@@ -1,6 +1,6 @@
 import { ApplicationCommandSimpleOption } from "builders/command-option";
 import { ApplicationCommandOptionType, type StringOptionAPI } from "types";
-import { applyMixins } from "utils/mixins";
+import { Mixin } from "utils/mixins";
 import {
   ApplicationCommandOptionAutocompleteMixin,
   ApplicationCommandOptionChoicesMixin,
@@ -10,6 +10,10 @@ export interface StringCommandOption
   extends ApplicationCommandOptionChoicesMixin<string>,
     ApplicationCommandOptionAutocompleteMixin {}
 
+@Mixin(
+  ApplicationCommandOptionChoicesMixin,
+  ApplicationCommandOptionAutocompleteMixin
+)
 export class StringCommandOption extends ApplicationCommandSimpleOption {
   public readonly min_length?: string;
   public readonly max_length?: string;
@@ -18,8 +22,3 @@ export class StringCommandOption extends ApplicationCommandSimpleOption {
     super({ type: ApplicationCommandOptionType.String, ...options });
   }
 }
-
-applyMixins(StringCommandOption, [
-  ApplicationCommandOptionChoicesMixin,
-  ApplicationCommandOptionAutocompleteMixin,
-]);

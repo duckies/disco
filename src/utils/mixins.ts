@@ -1,12 +1,18 @@
-export function applyMixins(derivedCtor: any, constructors: any[]) {
-  constructors.forEach((baseCtor) => {
-    Object.getOwnPropertyNames(baseCtor.prototype).forEach((name) => {
-      Object.defineProperty(
-        derivedCtor.prototype,
-        name,
-        Object.getOwnPropertyDescriptor(baseCtor.prototype, name) ??
-          Object.create(null)
-      );
-    });
-  });
+import type { Constructor } from "types";
+
+export function Mixin(...constructors: Constructor[]) {
+  return function (target: Constructor, ctx: ClassDecoratorContext) {
+    if (ctx.kind !== "class") return;
+
+    for (const constructor of constructors) {
+      Object.getOwnPropertyNames(constructor.prototype).forEach((name) => {
+        Object.defineProperty(
+          target.prototype,
+          name,
+          Object.getOwnPropertyDescriptor(constructor.prototype, name) ??
+            Object.create(null)
+        );
+      });
+    }
+  };
 }

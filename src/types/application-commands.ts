@@ -12,12 +12,13 @@ export interface ApplicationCommandAPIBase {
   name: string;
 }
 
-export interface ApplicationChatInputCommandOptions
+export interface ApplicationChatInputCommandAPI
   extends ApplicationCommandAPIBase {
   description: string;
   default_member_permissions?: string;
   nsfw?: boolean;
   contexts?: InteractionContextType[];
+  options?: ApplicationCommandOptionAPI[];
 }
 
 /**
@@ -95,7 +96,7 @@ export interface ApplicationCommandOptionAutocompleteMixin {
 export interface SubCommandOptionAPI<P = ApplicationCommandSimpleOptionAPI[]>
   extends ApplicationCommandOptionBase {
   type: ApplicationCommandOptionType.SubCommand;
-  options: P;
+  options?: P;
 }
 
 export interface SubCommandGroupOptionAPI extends ApplicationCommandOptionBase {
@@ -157,9 +158,7 @@ export interface AttachmentOptionAPI
   type: ApplicationCommandOptionType.Attachment;
 }
 
-export type ApplicationCommandOptionAPI =
-  | SubCommandOptionAPI<any>
-  | SubCommandGroupOptionAPI
+export type ApplicationCommandSimpleOptionAPI =
   | StringOptionAPI
   | IntegerOptionAPI
   | BooleanOptionAPI
@@ -170,7 +169,7 @@ export type ApplicationCommandOptionAPI =
   | NumberOptionAPI
   | AttachmentOptionAPI;
 
-export type ApplicationCommandSimpleOptionAPI = Exclude<
-  ApplicationCommandOptionAPI,
-  SubCommandOptionAPI<any> | SubCommandGroupOptionAPI
->;
+export type ApplicationCommandOptionAPI =
+  | ApplicationCommandSimpleOptionAPI
+  | SubCommandOptionAPI<any>
+  | SubCommandGroupOptionAPI;

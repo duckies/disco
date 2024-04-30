@@ -7,10 +7,10 @@ import {
 import type { Handler } from "types/handler";
 
 export class SubCommandOption<
-  const T extends ApplicationCommandSimpleOptionAPI[]
+  const T extends ApplicationCommandSimpleOptionAPI[] = []
 > extends ApplicationCommandOption {
   public options = new Map<string, ApplicationCommandOption>();
-  public handler?: Handler<T>;
+  public handler: Handler<T>;
 
   constructor(
     options: Omit<SubCommandOptionAPI<T>, "type">,

@@ -1,40 +1,38 @@
 import {
   ApplicationCommandType,
-  type ApplicationChatInputCommandOptions,
-  type ApplicationCommandSimpleOptionAPI,
+  type ApplicationChatInputCommandAPI,
   type InteractionContextType,
   type SubCommandGroupOptionAPI,
-  type SubCommandOptionAPI,
 } from "types";
-import type { Handler } from "types/handler";
+import { Mixin } from "utils/mixins";
 import { ApplicationCommand } from "./command";
 import type { ApplicationCommandOption } from "./command-option";
-import { SubCommandOption } from "./options/sub-command";
+import { SubCommandMixin } from "./mixins/sub-command";
 import { SubCommandGroupOption } from "./options/sub-command-group";
 
-export type ApplicationChatInputCommandOptionsOnly = Omit<
-  ApplicationChatInputCommand,
-  "addSubCommand"
->;
+export type ApplicationChatInputCommandOptionsOnly = {};
 
-export type ApplicationChatInputCommandSubCommandsOnly =
-  ApplicationChatInputCommand;
+export interface ApplicationChatInputCommandSubCommandsOnly
+  extends SubCommandMixin<ApplicationChatInputCommandSubCommandsOnly> {}
+
+export interface ApplicationChatInputCommand
+  extends SubCommandMixin<ApplicationChatInputCommandSubCommandsOnly> {}
 
 /**
  * Application Command (ChatInput)
  *
  * @see https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-structure
  */
+@Mixin(SubCommandMixin)
 export class ApplicationChatInputCommand extends ApplicationCommand {
   public readonly description!: string;
-  public required?: boolean;
-  public default_member_permissions?: string;
-  public nsfw?: boolean;
-  public contexts?: InteractionContextType[];
-
+  public readonly required?: boolean;
+  public readonly default_member_permissions?: string;
+  public readonly nsfw?: boolean;
+  public readonly contexts?: InteractionContextType[];
   public readonly options = new Map<string, ApplicationCommandOption>();
 
-  constructor(options: Omit<ApplicationChatInputCommandOptions, "type">) {
+  constructor(options: Omit<ApplicationChatInputCommandAPI, "type">) {
     super({ type: ApplicationCommandType.ChatInput, name: options.name });
 
     this.description = options.description;
@@ -43,22 +41,9 @@ export class ApplicationChatInputCommand extends ApplicationCommand {
     this.contexts = options.contexts;
   }
 
-  addSubCommand<T extends ApplicationCommandSimpleOptionAPI[]>(
-    options: Omit<SubCommandOptionAPI<T>, "type">,
-    handler: Handler<T>
-  ): ApplicationChatInputCommandSubCommandsOnly {
-    const option = new SubCommandOption(options, (g) => g);
-
-    this.options.set(option.name, option);
-
-    console.log("HANDLER", handler);
-
-    return this;
-  }
-
   addSubCommandGroup(
     options: Omit<SubCommandGroupOptionAPI, "type">,
-    callback: (group: SubCommandGroupOption) => SubCommandGroupOption
+    callback?: (group: SubCommandGroupOption) => SubCommandGroupOption
   ): ApplicationChatInputCommandSubCommandsOnly {
     const option = new SubCommandGroupOption({
       name: options.name,
@@ -67,8 +52,15 @@ export class ApplicationChatInputCommand extends ApplicationCommand {
 
     this.options.set(option.name, option);
 
-    callback(option);
+    callback?.(option);
 
     return this;
+  }
+
+  toJSON() {
+    return {
+      ...this,
+      options: [...this.options.values()].map((option) => option.toJSON()),
+    };
   }
 }

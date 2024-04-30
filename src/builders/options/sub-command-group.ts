@@ -4,10 +4,10 @@ import {
   type SubCommandGroupOptionAPI,
   type SubCommandOptionAPI,
 } from "types";
-import { SubCommandOption } from "./sub-command-option";
+import { SubCommandOption } from "./sub-command";
 
 export class SubCommandGroupOption extends ApplicationCommandOption {
-  public readonly options = new Map<string, SubCommandOption>();
+  public readonly options = new Map<string, SubCommandOption<any>>();
 
   constructor(options: Omit<SubCommandGroupOptionAPI, "type" | "options">) {
     super({
