@@ -1,21 +1,23 @@
 import { ApplicationCommandOption } from "builders/command-option";
+import { HandlerMixin } from "builders/mixins/handler";
 import {
   ApplicationCommandOptionType,
   type ApplicationCommandSimpleOptionAPI,
   type SubCommandOptionAPI,
 } from "types";
 import type { Handler } from "types/handler";
+import { Mixin } from "utils/mixins";
 
+export interface SubCommandOption extends HandlerMixin {}
+
+@Mixin(HandlerMixin)
 export class SubCommandOption<
   const T extends ApplicationCommandSimpleOptionAPI[] = []
 > extends ApplicationCommandOption {
   public options = new Map<string, ApplicationCommandOption>();
-  public handler: Handler<T>;
+  public handler?: Handler<T>;
 
-  constructor(
-    options: Omit<SubCommandOptionAPI<T>, "type">,
-    handler: Handler<T>
-  ) {
+  constructor(options: Omit<SubCommandOptionAPI<T>, "type">) {
     super({
       type: ApplicationCommandOptionType.SubCommand,
       name: options.name,
@@ -27,8 +29,6 @@ export class SubCommandOption<
       const instance = new ApplicationCommandOption(option);
       this.options.set(option.name, instance);
     }
-
-    this.handler = handler;
   }
 
   toJSON() {

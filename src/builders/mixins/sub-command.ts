@@ -2,20 +2,24 @@ import type { ApplicationCommandOption } from "builders/command-option";
 import { SubCommandOption } from "builders/options/sub-command";
 import type {
   ApplicationCommandSimpleOptionAPI,
-  Handler,
   SubCommandOptionAPI,
 } from "types";
 
-export abstract class SubCommandMixin<T extends SubCommandMixin<T>> {
+export abstract class SubCommandMixin {
   public readonly options!: Map<string, ApplicationCommandOption>;
 
   public addSubCommand<
     const Q extends ApplicationCommandSimpleOptionAPI[] = []
-  >(options: Omit<SubCommandOptionAPI<Q>, "type">, handler: Handler<Q>): T {
-    const option = new SubCommandOption(options, handler);
+  >(
+    options: Omit<SubCommandOptionAPI<Q>, "type">,
+    callback?: (subCommand: SubCommandOption<Q>) => SubCommandOption<Q>
+  ) {
+    const option = new SubCommandOption(options);
 
     this.options.set(option.name, option);
 
-    return this as unknown as T;
+    callback?.(option);
+
+    return this;
   }
 }
