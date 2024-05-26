@@ -1,8 +1,4 @@
 import type {
-  ApplicationCommandOptionAPI,
-  ApplicationCommandOptionType,
-} from "builders/application-command-option";
-import type {
   Attachment,
   Channel,
   ChatInputCommandInteraction,
@@ -10,6 +6,10 @@ import type {
   User,
 } from "discord.js";
 import type { Simplify } from "./utility";
+import type {
+  ApplicationCommandOptionAPI,
+  ApplicationCommandOptionType,
+} from "./application-commands";
 
 export interface OptionTypeMap {
   [ApplicationCommandOptionType.SubCommand]: never;
