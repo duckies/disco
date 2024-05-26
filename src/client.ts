@@ -1,33 +1,26 @@
 import {
-  GroupChatInputCommand,
-  RootChatInputCommand,
-  type ChatInputCommand,
-  type GroupChatInputCommandOptions,
-  type RootChatInputCommandOptions,
-} from "builders/chat-input-command";
+  ApplicationChatInputCommand,
+  type ApplicationChatInputCommandOptions,
+} from "builders/application-chat-input-command";
+import type { ApplicationCommandOptionAPI } from "builders/application-command-option";
+
 import type { ClientOptions } from "discord.js";
 import { Client } from "discord.js";
-import type { ApplicationCommandSimpleOptionAPI } from "types";
 
 export class DiscordClient extends Client {
-  public readonly commands = new Map<string, ChatInputCommand>();
+  public readonly commands = new Map<
+    string,
+    ApplicationChatInputCommand<any>
+  >();
 
   constructor(options: ClientOptions) {
     super(options);
   }
 
-  defineCommand(options: GroupChatInputCommandOptions) {
-    const command = new GroupChatInputCommand(options);
-
-    this.commands.set(command.name, command);
-
-    return command;
-  }
-
-  defineRootCommand<const T extends ApplicationCommandSimpleOptionAPI[]>(
-    options: RootChatInputCommandOptions<T>
+  defineCommand<const T extends ApplicationCommandOptionAPI[]>(
+    options: ApplicationChatInputCommandOptions<T>
   ) {
-    const command = new RootChatInputCommand(options);
+    const command = new ApplicationChatInputCommand(options);
 
     this.commands.set(command.name, command);
 

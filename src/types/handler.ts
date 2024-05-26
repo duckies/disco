@@ -1,17 +1,19 @@
 import type {
+  ApplicationCommandOptionAPI,
+  ApplicationCommandOptionType,
+} from "builders/application-command-option";
+import type {
   Attachment,
   Channel,
   ChatInputCommandInteraction,
   Role,
   User,
 } from "discord.js";
-import type {
-  ApplicationCommandOptionType,
-  ApplicationCommandSimpleOptionAPI,
-} from "./application-commands";
 import type { Simplify } from "./utility";
 
 export interface OptionTypeMap {
+  [ApplicationCommandOptionType.SubCommand]: never;
+  [ApplicationCommandOptionType.SubCommandGroup]: never;
   [ApplicationCommandOptionType.String]: string;
   [ApplicationCommandOptionType.Integer]: number;
   [ApplicationCommandOptionType.Boolean]: boolean;
@@ -23,23 +25,22 @@ export interface OptionTypeMap {
   [ApplicationCommandOptionType.Attachment]: Attachment;
 }
 
-export type OptionType<T extends ApplicationCommandSimpleOptionAPI> =
-  T["required"] extends true
-    ? OptionTypeMap[T["type"]]
-    : OptionTypeMap[T["type"]] | undefined;
+export type OptionType<T extends ApplicationCommandOptionAPI> = T extends {
+  required: true;
+}
+  ? OptionTypeMap[T["type"]]
+  : OptionTypeMap[T["type"]] | undefined;
 
-export type OptionsToParams<T extends ApplicationCommandSimpleOptionAPI[]> = {
+export type OptionsToParams<T extends ApplicationCommandOptionAPI[]> = {
   [K in T[number]["name"]]: OptionType<Extract<T[number], { name: K }>>;
 };
 
-export interface InteractionContext<
-  P extends ApplicationCommandSimpleOptionAPI[]
-> {
+export interface InteractionContext<P extends ApplicationCommandOptionAPI[]> {
   interaction: ChatInputCommandInteraction;
   params: OptionsToParams<P>;
 }
 
-export type Handler<P extends ApplicationCommandSimpleOptionAPI[]> = (ctx: {
+export type Handler<P extends ApplicationCommandOptionAPI[]> = (ctx: {
   interaction: ChatInputCommandInteraction;
   params: Simplify<OptionsToParams<P>>;
 }) => unknown;

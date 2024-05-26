@@ -5,17 +5,20 @@ export const Discord = new DiscordClient({
   intents: ["Guilds", "GuildMessages"],
 });
 
-Discord.defineRootCommand({
+export const testCommand = Discord.defineCommand({
   name: "example",
   description: "Example command",
   options: [
     {
-      name: "subcommand",
-      description: "Subcommand",
-      type: ApplicationCommandOptionType.Channel,
+      name: "first",
+      description: "whatever",
+      type: ApplicationCommandOptionType.Boolean,
+      required: true,
     },
   ],
   handler: (ctx) => {
     ctx.params;
   },
 });
+
+console.log(testCommand);
