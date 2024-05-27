@@ -37,4 +37,12 @@ export abstract class ApplicationCommand {
     this.name = options.name;
     this.contexts = options.contexts;
   }
+
+  public toJSON(): ApplicationCommandAPIBase {
+    return {
+      type: this.type,
+      name: this.name,
+      contexts: this.contexts,
+    };
+  }
 }

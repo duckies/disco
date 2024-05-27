@@ -15,30 +15,33 @@ import { ApplicationCommandOptionChoicesMixin } from "./mixins/application-comma
 import { ApplicationCommandOptionMinMaxMixin } from "./mixins/application-command-option-minmax-mixin";
 import { ApplicationCommandOptionRequiredMixin } from "./mixins/application-command-option-required-mixin";
 
-export interface ApplicationCommandIntegerOptionAPI
-  extends ApplicationCommandOptionAPIBase,
-    ApplicationCommandOptionWithRequired,
+export interface ApplicationCommandIntegerOptionAPI<R extends boolean | undefined = undefined>
+  extends ApplicationCommandOptionAPIBase<ApplicationCommandOptionType.Integer>,
+    ApplicationCommandOptionWithRequired<R>,
     ApplicationCommandOptionWithChoices<number>,
     ApplicationCommandOptionWithAutocomplete,
     ApplicationCommandOptionWithMinMaxValues {
   type: ApplicationCommandOptionType.Integer;
 }
 
-export interface ApplicationCommandIntegerOptionOptions
-  extends Omit<ApplicationCommandIntegerOptionAPI, "type"> {}
+export interface ApplicationCommandIntegerOptionOptions<R extends boolean | undefined = undefined>
+  extends Omit<ApplicationCommandIntegerOptionAPI<R>, "type"> {}
 
-export interface ApplicationCommandIntegerOption
-  extends ApplicationCommandOptionRequiredMixin,
+export interface ApplicationCommandIntegerOption<R extends boolean>
+  extends ApplicationCommandOptionRequiredMixin<R>,
     ApplicationCommandOptionChoicesMixin<"number">,
     ApplicationCommandOptionAutocompleteMixin,
     ApplicationCommandOptionMinMaxMixin {}
 
-export class ApplicationCommandIntegerOption extends ApplicationCommandOptionBase {
+export class ApplicationCommandIntegerOption<R extends boolean = false> extends ApplicationCommandOptionBase<ApplicationCommandOptionType.Integer> {
+  public readonly required?: R
+  public readonly autocomplete?: boolean;
+  
   constructor({
     name,
     description,
     ...options
-  }: ApplicationCommandIntegerOptionOptions) {
+  }: ApplicationCommandIntegerOptionOptions<R>) {
     super({
       type: ApplicationCommandOptionType.Integer,
       name,

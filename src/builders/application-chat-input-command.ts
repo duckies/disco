@@ -2,20 +2,20 @@ import {
   type ApplicationCommandOption,
   type ApplicationCommandOptionAPI,
   type Handler,
+  type Params,
 } from "types";
 import { applyMixins } from "utils/mixins";
-import { createOption } from "utils/create-option";
 import {
   ApplicationCommand,
   ApplicationCommandType,
   type ApplicationCommandAPIBase,
 } from "./application-command";
-import {} from "./application-command-option";
+import { } from "./application-command-option";
+import { ApplicationCommandOptionSubCommandMixin } from "./mixins/application-command-subcommand-mixin";
 import {
   ApplicationCommandSubCommandGroupOption,
   type ApplicationCommandSubCommandGroupOptionOptions,
 } from "./options/application-command-subcommand-group-option";
-import { ApplicationCommandOptionSubCommandMixin } from "./mixins/application-command-subcommand-mixin";
 
 export interface ApplicationChatInputCommandAPI
   extends ApplicationCommandAPIBase {
@@ -26,16 +26,16 @@ export interface ApplicationChatInputCommandAPI
 }
 
 export interface ApplicationChatInputCommandOptions<
-  T extends ApplicationCommandOptionAPI[]
-> extends Omit<ApplicationChatInputCommandAPI, "type"> {
-  options?: T;
-  handler?: Handler<T>;
+  P extends Params
+> extends Omit<ApplicationChatInputCommandAPI, "type" | "options"> {
+  options?: P;
+  handler?: Handler<P>;
 }
 
 export interface ApplicationChatInputCommand<
-  T extends ApplicationCommandOptionAPI[]
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  P extends Params
 > extends ApplicationCommandOptionSubCommandMixin {
-  readonly handler?: Handler<T>;
 }
 
 /**
@@ -44,34 +44,40 @@ export interface ApplicationChatInputCommand<
  * @see https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-structure
  */
 export class ApplicationChatInputCommand<
-  const T extends ApplicationCommandOptionAPI[] = []
+  const P extends Params
 > extends ApplicationCommand {
-  public readonly description!: string;
+  public readonly description: string;
   public readonly default_member_permissions?: string;
   public readonly nsfw?: boolean;
   public readonly options = new Map<string, ApplicationCommandOption>();
-  public readonly handler?: Handler<T>;
+  public readonly handler?: Handler<P>;
 
   constructor({
     name,
     contexts,
     options,
-    ...meta
-  }: ApplicationChatInputCommandOptions<T>) {
+    handler,
+    description,
+    default_member_permissions,
+    nsfw
+  }: ApplicationChatInputCommandOptions<P>) {
     super({
       type: ApplicationCommandType.ChatInput,
       name,
       contexts,
     });
 
-    Object.assign(this, meta);
+    this.handler = handler;
+    this.description = description;
+    this.default_member_permissions = default_member_permissions;
+    this.nsfw = nsfw;
 
-    for (const option of options ?? []) {
-      if (this.options.has(option.name)) {
-        throw new Error(`Option with name ${option.name} already exists`);
+    for (const [name, option] of Object.entries(options ?? {})) {
+      if (this.options.has(name)) {
+        throw new Error(`Option with name ${name} already exists`);
       }
 
-      this.options.set(option.name, createOption(option));
+      this.options.set(name, option);
     }
   }
 
@@ -90,9 +96,13 @@ export class ApplicationChatInputCommand<
     return this;
   }
 
-  toJSON() {
+  public toJSON(): ApplicationChatInputCommandAPI {
     return {
-      ...this,
+      ...super.toJSON(),
+      description: this.description,
+      default_member_permissions: this.default_member_permissions,
+      contexts: this.contexts,
+      nsfw: this.nsfw,
       options: [...this.options.values()].map((option) => option.toJSON()),
     };
   }

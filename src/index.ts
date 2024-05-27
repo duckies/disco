@@ -1,24 +1,8 @@
-import { DiscordClient } from "client";
-import { ApplicationCommandOptionType } from "types";
+import { Client } from "client";
+import { env } from "env";
 
-export const Discord = new DiscordClient({
+export const Discord = new Client({
   intents: ["Guilds", "GuildMessages"],
 });
 
-export const testCommand = Discord.defineCommand({
-  name: "example",
-  description: "Example command",
-  options: [
-    {
-      name: "first",
-      description: "whatever",
-      type: ApplicationCommandOptionType.Boolean,
-      required: true,
-    },
-  ],
-  handler: (ctx) => {
-    ctx.params;
-  },
-});
-
-console.log(testCommand);
+await Discord.login(env.DISCORD_BOT_TOKEN);

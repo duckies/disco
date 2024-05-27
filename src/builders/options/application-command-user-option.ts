@@ -9,21 +9,21 @@ import {
 import { applyMixins } from "utils/mixins";
 import { ApplicationCommandOptionRequiredMixin } from "./mixins/application-command-option-required-mixin";
 
-export interface ApplicationCommandUserOptionAPI
-  extends ApplicationCommandOptionAPIBase,
-    ApplicationCommandOptionWithRequired {
+export interface ApplicationCommandUserOptionAPI<R extends boolean>
+  extends ApplicationCommandOptionAPIBase<ApplicationCommandOptionType.User>,
+    ApplicationCommandOptionWithRequired<R> {
   type: ApplicationCommandOptionType.User;
 }
 
-export interface ApplicationCommandUserOptionOptions
-  extends Omit<ApplicationCommandUserOptionAPI, "type"> {}
+export interface ApplicationCommandUserOptionOptions<R extends boolean>
+  extends Omit<ApplicationCommandUserOptionAPI<R>, "type"> {}
 
-export class ApplicationCommandUserOption extends ApplicationCommandOptionBase {
+export class ApplicationCommandUserOption<R extends boolean = false> extends ApplicationCommandOptionBase<ApplicationCommandOptionType.User> {
   constructor({
     name,
     description,
     ...options
-  }: ApplicationCommandUserOptionOptions) {
+  }: ApplicationCommandUserOptionOptions<R>) {
     super({ type: ApplicationCommandOptionType.User, name, description });
     Object.assign(this, options);
   }

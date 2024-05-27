@@ -28,22 +28,22 @@ export enum ChannelType {
   GuildMedia,
 }
 
-export interface ApplicationCommandChannelOptionAPI
-  extends ApplicationCommandOptionAPIBase,
-    ApplicationCommandOptionWithRequired {
+export interface ApplicationCommandChannelOptionAPI<R extends boolean>
+  extends ApplicationCommandOptionAPIBase<ApplicationCommandOptionType.Channel>,
+    ApplicationCommandOptionWithRequired<R> {
   type: ApplicationCommandOptionType.Channel;
   channel_types?: ChannelType[];
 }
 
-export interface ApplicationCommandChannelOptionOptions
-  extends Omit<ApplicationCommandChannelOptionAPI, "type"> {}
+export interface ApplicationCommandChannelOptionOptions<R extends boolean = false>
+  extends Omit<ApplicationCommandChannelOptionAPI<R>, "type"> {}
 
-export class ApplicationCommandChannelOption extends ApplicationCommandOptionBase {
+export class ApplicationCommandChannelOption<R extends boolean = false> extends ApplicationCommandOptionBase<ApplicationCommandOptionType.Channel> {
   constructor({
     name,
     description,
     ...options
-  }: ApplicationCommandChannelOptionOptions) {
+  }: ApplicationCommandChannelOptionOptions<R>) {
     super({ type: ApplicationCommandOptionType.Channel, name, description });
     Object.assign(this, options);
   }

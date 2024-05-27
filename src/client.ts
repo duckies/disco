@@ -1,29 +1,35 @@
-import {
-  ApplicationChatInputCommand,
-  type ApplicationChatInputCommandOptions,
-} from "builders/application-chat-input-command";
-import type { ApplicationCommandOptionAPI } from "builders/application-command-option";
+import type { ApplicationChatInputCommand } from "builders/application-chat-input-command";
+import { Commander, type CommanderOptions } from "commander";
+import { Client as _Client, type ClientOptions as _ClientOptions } from "discord.js";
+import type { BotError } from "errors";
 
-import type { ClientOptions } from "discord.js";
-import { Client } from "discord.js";
+export interface ClientOptions extends _ClientOptions {
+  commander?: CommanderOptions;
+}
 
-export class DiscordClient extends Client {
-  public readonly commands = new Map<
-    string,
-    ApplicationChatInputCommand<any>
-  >();
+export class Client extends _Client {
+  public readonly commander: Commander
 
   constructor(options: ClientOptions) {
     super(options);
+
+    this.commander = new Commander(options?.commander)
+
+    this.commander.on("initialize", this.onInitialize.bind(this))
+    this.commander.on("error", this.onError.bind(this))
+    this.once("ready", this.onReady.bind(this));
+    this.on("interactionCreate", this.commander.onInteraction.bind(this));
   }
 
-  defineCommand<const T extends ApplicationCommandOptionAPI[]>(
-    options: ApplicationChatInputCommandOptions<T>
-  ) {
-    const command = new ApplicationChatInputCommand(options);
+  private onInitialize(commands: Map<string, ApplicationChatInputCommand<any>>) {
+    console.log(`[Client]: Initialized with ${commands.size} command(s).`)
+  }
 
-    this.commands.set(command.name, command);
+  private onError(error: BotError) {
+    console.error(`[Client Error]: ${error.name}`, error)
+  }
 
-    return command;
+  private onReady(client: _Client<true>) {
+    console.log(`Logged in as ${client.user?.tag}`);
   }
 }

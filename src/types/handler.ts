@@ -1,3 +1,4 @@
+import type { ApplicationCommandOptionBase } from "builders/application-command-option";
 import type {
   Attachment,
   Channel,
@@ -5,13 +6,14 @@ import type {
   Role,
   User,
 } from "discord.js";
-import type { Simplify } from "./utility";
 import type {
-  ApplicationCommandOptionAPI,
+  ApplicationCommandOption,
   ApplicationCommandOptionType,
+  ApplicationCommandSimpleOption,
 } from "./application-commands";
+import type { Simplify } from "./utility";
 
-export interface OptionTypeMap {
+export interface ApplicationCommandOptionParameterType {
   [ApplicationCommandOptionType.SubCommand]: never;
   [ApplicationCommandOptionType.SubCommandGroup]: never;
   [ApplicationCommandOptionType.String]: string;
@@ -25,22 +27,45 @@ export interface OptionTypeMap {
   [ApplicationCommandOptionType.Attachment]: Attachment;
 }
 
-export type OptionType<T extends ApplicationCommandOptionAPI> = T extends {
-  required: true;
+export interface OptionTypeMap {
+  ApplicationCommandSubCommandOption: never;
+  ApplicationCommandSubCommandGroupOption: never;
+  ApplicationCommandStringOption: string;
+  ApplicationCommandIntegerOption: number;
+  ApplicationCommandBooleanOption: boolean;
+  ApplicationCommandUserOption: User;
+  ApplicationCommandChannelOption: Channel;
+  ApplicationCommandRoleOption: Role;
+  ApplicationCommandMentionableOption: User | Role;
+  ApplicationCommandNumberOption: number;
+  ApplicationCommandAttachmentOption: Attachment;
 }
-  ? OptionTypeMap[T["type"]]
-  : OptionTypeMap[T["type"]] | undefined;
 
-export type OptionsToParams<T extends ApplicationCommandOptionAPI[]> = {
-  [K in T[number]["name"]]: OptionType<Extract<T[number], { name: K }>>;
-};
+export type Params = Record<string, ApplicationCommandSimpleOption>;
 
-export interface InteractionContext<P extends ApplicationCommandOptionAPI[]> {
+export type OptionType<O extends ApplicationCommandOption> =
+  O extends ApplicationCommandOptionBase<infer T>
+    ? ApplicationCommandOptionParameterType[T]
+    : never;
+
+export type ParamRequired<T extends ApplicationCommandOption> =
+  T extends ApplicationCommandSimpleOption<infer R> ? R : never;
+
+export type ParamResult<P extends Params> = Simplify<
+  {
+    [K in keyof P as ParamRequired<P[K]> extends true 
+      ? K : never]: OptionType<P[K]>;
+  } & {
+    [K in keyof P as ParamRequired<P[K]> extends false
+        ? K
+        : never
+      ]?: OptionType<P[K]>;
+  }
+>;
+
+export interface InteractionContext<P extends Params> {
   interaction: ChatInputCommandInteraction;
-  params: OptionsToParams<P>;
+  params: ParamResult<P>;
 }
 
-export type Handler<P extends ApplicationCommandOptionAPI[]> = (ctx: {
-  interaction: ChatInputCommandInteraction;
-  params: Simplify<OptionsToParams<P>>;
-}) => unknown;
+export type Handler<P extends Params> = (ctx: InteractionContext<P>) => Promise<unknown>;

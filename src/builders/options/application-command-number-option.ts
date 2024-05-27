@@ -15,30 +15,30 @@ import { ApplicationCommandOptionChoicesMixin } from "./mixins/application-comma
 import { ApplicationCommandOptionMinMaxMixin } from "./mixins/application-command-option-minmax-mixin";
 import { ApplicationCommandOptionRequiredMixin } from "./mixins/application-command-option-required-mixin";
 
-export interface ApplicationCommandNumberOptionAPI
-  extends ApplicationCommandOptionAPIBase,
-    ApplicationCommandOptionWithRequired,
+export interface ApplicationCommandNumberOptionAPI<R extends boolean>
+  extends ApplicationCommandOptionAPIBase<ApplicationCommandOptionType.Number>,
+    ApplicationCommandOptionWithRequired<R>,
     ApplicationCommandOptionWithChoices<number>,
     ApplicationCommandOptionWithAutocomplete,
     ApplicationCommandOptionWithMinMaxValues {
   type: ApplicationCommandOptionType.Number;
 }
 
-export interface ApplicationCommandNumberOptionOptions
-  extends Omit<ApplicationCommandNumberOptionAPI, "type"> {}
+export interface ApplicationCommandNumberOptionOptions<R extends boolean>
+  extends Omit<ApplicationCommandNumberOptionAPI<R>, "type"> {}
 
-export interface ApplicationCommandNumberOption
-  extends ApplicationCommandOptionRequiredMixin,
+export interface ApplicationCommandNumberOption<R extends boolean>
+  extends ApplicationCommandOptionRequiredMixin<R>,
     ApplicationCommandOptionChoicesMixin<"Number">,
     ApplicationCommandOptionAutocompleteMixin,
     ApplicationCommandOptionMinMaxMixin {}
 
-export class ApplicationCommandNumberOption extends ApplicationCommandOptionBase {
+export class ApplicationCommandNumberOption<R extends boolean = false> extends ApplicationCommandOptionBase<ApplicationCommandOptionType.Number> {
   constructor({
     name,
     description,
     ...options
-  }: ApplicationCommandNumberOptionOptions) {
+  }: ApplicationCommandNumberOptionOptions<R>) {
     super({
       type: ApplicationCommandOptionType.Number,
       name,

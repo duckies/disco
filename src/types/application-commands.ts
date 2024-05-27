@@ -40,8 +40,8 @@ export enum ApplicationCommandOptionType {
   Attachment = 11,
 }
 
-export type ApplicationCommandOptionWithRequired = {
-  required?: boolean;
+export type ApplicationCommandOptionWithRequired<R extends boolean | undefined = undefined> = {
+  required?: R;
 };
 
 /**
@@ -65,32 +65,32 @@ export interface ApplicationCommandOptionWithMinMaxValues {
   max_value?: number;
 }
 
-export type ApplicationCommandSimpleOptionAPI =
-  | ApplicationCommandStringOptionAPI
-  | ApplicationCommandIntegerOptionAPI
-  | ApplicationCommandBooleanOptionAPI
-  | ApplicationCommandUserOptionAPI
-  | ApplicationCommandChannelOptionAPI
-  | ApplicationCommandRoleOptionAPI
-  | ApplicationCommandMentionableOptionAPI
-  | ApplicationCommandNumberOptionAPI
-  | ApplicationCommandAttachmentOptionAPI;
+export type ApplicationCommandSimpleOptionAPI<R extends boolean = any> =
+  | ApplicationCommandStringOptionAPI<R>
+  | ApplicationCommandIntegerOptionAPI<R>
+  | ApplicationCommandBooleanOptionAPI<R>
+  | ApplicationCommandUserOptionAPI<R>
+  | ApplicationCommandChannelOptionAPI<R>
+  | ApplicationCommandRoleOptionAPI<R>
+  | ApplicationCommandMentionableOptionAPI<R>
+  | ApplicationCommandNumberOptionAPI<R>
+  | ApplicationCommandAttachmentOptionAPI<R>;
 
 export type ApplicationCommandOptionAPI =
-  | ApplicationCommandSimpleOptionAPI
+  | ApplicationCommandSimpleOptionAPI<any>
   | ApplicationCommandSubCommandOptionAPI
   | ApplicationCommandSubCommandGroupOptionAPI;
 
-export type ApplicationCommandSimpleOption =
-  | ApplicationCommandStringOption
-  | ApplicationCommandIntegerOption
-  | ApplicationCommandBooleanOption
-  | ApplicationCommandUserOption
-  | ApplicationCommandChannelOption
-  | ApplicationCommandRoleOption
-  | ApplicationCommandMentionableOption
-  | ApplicationCommandNumberOption
-  | ApplicationCommandAttachmentOption;
+export type ApplicationCommandSimpleOption<R extends boolean = boolean> =
+  | ApplicationCommandStringOption<R>
+  | ApplicationCommandIntegerOption<R>
+  | ApplicationCommandBooleanOption<R>
+  | ApplicationCommandUserOption<R>
+  | ApplicationCommandChannelOption<R>
+  | ApplicationCommandRoleOption<R>
+  | ApplicationCommandMentionableOption<R>
+  | ApplicationCommandNumberOption<R>
+  | ApplicationCommandAttachmentOption<R>;
 
 export type ApplicationCommandOption =
   | ApplicationCommandSimpleOption

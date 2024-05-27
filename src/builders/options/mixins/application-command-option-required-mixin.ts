@@ -1,3 +1,3 @@
-export abstract class ApplicationCommandOptionRequiredMixin {
-  public required?: boolean;
+export abstract class ApplicationCommandOptionRequiredMixin<R extends boolean> {
+  public required?: R;
 }

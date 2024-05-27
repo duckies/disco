@@ -9,24 +9,24 @@ import {
 import { applyMixins } from "utils/mixins";
 import { ApplicationCommandOptionRequiredMixin } from "./mixins/application-command-option-required-mixin";
 
-export interface ApplicationCommandBooleanOptionAPI
-  extends ApplicationCommandOptionAPIBase,
-    ApplicationCommandOptionWithRequired {
+export interface ApplicationCommandBooleanOptionAPI<R extends boolean>
+  extends ApplicationCommandOptionAPIBase<ApplicationCommandOptionType.Boolean>,
+    ApplicationCommandOptionWithRequired<R> {
   type: ApplicationCommandOptionType.Boolean;
 }
 
-export interface ApplicationCommandBooleanOptionOptions
-  extends Omit<ApplicationCommandBooleanOptionAPI, "type"> {}
+export interface ApplicationCommandBooleanOptionOptions<R extends boolean>
+  extends Omit<ApplicationCommandBooleanOptionAPI<R>, "type"> {}
 
-export interface ApplicationCommandBooleanOption
-  extends ApplicationCommandOptionRequiredMixin {}
+export interface ApplicationCommandBooleanOption<R extends boolean>
+  extends ApplicationCommandOptionRequiredMixin<R> {}
 
-export class ApplicationCommandBooleanOption extends ApplicationCommandOptionBase {
+export class ApplicationCommandBooleanOption<R extends boolean = false> extends ApplicationCommandOptionBase<ApplicationCommandOptionType.Boolean> {
   constructor({
     name,
     description,
     ...options
-  }: ApplicationCommandBooleanOptionOptions) {
+  }: ApplicationCommandBooleanOptionOptions<R>) {
     super({
       type: ApplicationCommandOptionType.Boolean,
       name,

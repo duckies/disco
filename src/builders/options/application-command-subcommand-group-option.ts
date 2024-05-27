@@ -11,7 +11,7 @@ import type {
 } from "./application-command-subcommand-option";
 
 export interface ApplicationCommandSubCommandGroupOptionAPI
-  extends ApplicationCommandOptionAPIBase {
+  extends ApplicationCommandOptionAPIBase<ApplicationCommandOptionType.SubCommandGroup> {
   type: ApplicationCommandOptionType.SubCommandGroup;
   options?: ApplicationCommandSubCommandOptionAPI[];
 }
@@ -22,7 +22,7 @@ export interface ApplicationCommandSubCommandGroupOptionOptions
 export interface ApplicationCommandSubCommandGroupOption
   extends ApplicationCommandOptionSubCommandMixin {}
 
-export class ApplicationCommandSubCommandGroupOption extends ApplicationCommandOptionBase {
+export class ApplicationCommandSubCommandGroupOption extends ApplicationCommandOptionBase<ApplicationCommandOptionType.SubCommandGroup> {
   public readonly options!: Map<
     string,
     ApplicationCommandSubCommandOption<any>

@@ -1,25 +1,27 @@
 import type { ApplicationCommandOptionType } from "types";
 
-export interface ApplicationCommandOptionAPIBase {
-  type: ApplicationCommandOptionType;
+export interface ApplicationCommandOptionAPIBase<T extends ApplicationCommandOptionType> {
+  type: T;
   name: string;
   description: string;
 }
 
-export abstract class ApplicationCommandOptionBase {
-  public readonly type!: ApplicationCommandOptionType;
-  public readonly name!: string;
-  public readonly description!: string;
+export abstract class ApplicationCommandOptionBase<T extends ApplicationCommandOptionType>{
+  public readonly type: T;
+  public readonly name: string;
+  public readonly description: string;
 
-  constructor(options: ApplicationCommandOptionAPIBase) {
+  constructor(options: ApplicationCommandOptionAPIBase<T>) {
     this.type = options.type;
     this.name = options.name;
     this.description = options.description;
   }
 
-  toJSON() {
+  public toJSON(): ApplicationCommandOptionAPIBase<T> {
     return {
-      ...this,
+      type: this.type,
+      name: this.name,
+      description: this.description
     };
   }
 }
