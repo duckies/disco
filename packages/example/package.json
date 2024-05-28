@@ -1,0 +1,14 @@
+{
+  "name": "@duckies/discord-example",
+  "private": true,
+  "module": "src/index.ts",
+  "scripts": {
+    "dev": "bun --watch src/index.ts"
+  },
+  "dependencies": {
+    "@duckies/discord": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "5.4.5"
+  }
+}
