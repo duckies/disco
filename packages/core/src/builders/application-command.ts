@@ -1,3 +1,5 @@
+import type { NonPartial } from "types";
+
 /**
  * @see https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-types
  */
@@ -38,7 +40,7 @@ export abstract class ApplicationCommand {
     this.contexts = options.contexts;
   }
 
-  public toJSON(): ApplicationCommandAPIBase {
+  public toJSON(): NonPartial<ApplicationCommandAPIBase> {
     return {
       type: this.type,
       name: this.name,

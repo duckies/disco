@@ -19,17 +19,13 @@ export default ts.config(
       "@typescript-eslint/no-unsafe-argument": ["off"],
       "@typescript-eslint/no-unsafe-member-access": ["off"],
       "@typescript-eslint/no-explicit-any": ["off"],
-      "@typescript-eslint/no-empty-interface": ["off"],
-      "@typescript-eslint/no-empty-function": ["off"],
-      "@typescript-eslint/ban-types": [
+      "@typescript-eslint/no-empty-object-type": [
         "error",
         {
-          types: {
-            "{}": false,
-          },
-          extendDefaults: true,
+          allowInterfaces: "with-single-extends",
         },
       ],
+      "@typescript-eslint/no-empty-function": ["off"],
     },
   },
   {
@@ -50,9 +46,12 @@ export default ts.config(
   {
     languageOptions: {
       parserOptions: {
-        project: true,
+        project: ["tsconfig.json", "packages/*/tsconfig.json"],
         tsconfigRootDir: import.meta.dirname,
       },
     },
+  },
+  {
+    ignores: ["**/dist/"],
   }
 );

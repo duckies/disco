@@ -5,6 +5,7 @@ import {
 import {
   ApplicationCommandOptionType,
   type ApplicationCommandOptionWithRequired,
+  type NonPartial,
 } from "../../types";
 import { applyMixins } from "../../utils/mixins";
 import { ApplicationCommandOptionRequiredMixin } from "./mixins/application-command-option-required-mixin";
@@ -35,10 +36,18 @@ export interface ApplicationCommandChannelOptionAPI<R extends boolean>
   channel_types?: ChannelType[];
 }
 
-export interface ApplicationCommandChannelOptionOptions<R extends boolean = false>
-  extends Omit<ApplicationCommandChannelOptionAPI<R>, "type"> {}
+export interface ApplicationCommandChannelOptionOptions<
+  R extends boolean = false
+> extends Omit<ApplicationCommandChannelOptionAPI<R>, "type"> {}
 
-export class ApplicationCommandChannelOption<R extends boolean = false> extends ApplicationCommandOptionBase<ApplicationCommandOptionType.Channel> {
+export interface ApplicationCommandChannelOption<R extends boolean>
+  extends ApplicationCommandOptionRequiredMixin<R> {}
+
+export class ApplicationCommandChannelOption<
+  R extends boolean = false
+> extends ApplicationCommandOptionBase<ApplicationCommandOptionType.Channel> {
+  public readonly channel_types?: ChannelType[];
+
   constructor({
     name,
     description,
@@ -46,6 +55,14 @@ export class ApplicationCommandChannelOption<R extends boolean = false> extends 
   }: ApplicationCommandChannelOptionOptions<R>) {
     super({ type: ApplicationCommandOptionType.Channel, name, description });
     Object.assign(this, options);
+  }
+
+  public toJSON(): NonPartial<ApplicationCommandChannelOptionAPI<R>> {
+    return {
+      ...super.toJSON(),
+      required: this.required,
+      channel_types: this.channel_types,
+    };
   }
 }
 

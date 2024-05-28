@@ -1,15 +1,16 @@
 import {
-  ApplicationCommandOptionBase,
-  type ApplicationCommandOptionAPIBase,
-} from "../application-command-option";
-import {
   ApplicationCommandOptionType,
   type ApplicationCommandOptionWithAutocomplete,
   type ApplicationCommandOptionWithChoices,
   type ApplicationCommandOptionWithMinMaxValues,
   type ApplicationCommandOptionWithRequired,
-} from "../../types";
-import { applyMixins } from "../../utils/mixins";
+  type NonPartial,
+} from "types";
+import { applyMixins } from "utils/mixins";
+import {
+  ApplicationCommandOptionBase,
+  type ApplicationCommandOptionAPIBase,
+} from "../application-command-option";
 import { ApplicationCommandOptionAutocompleteMixin } from "./mixins/application-command-option-autocomplete-mixin";
 import { ApplicationCommandOptionChoicesMixin } from "./mixins/application-command-option-choices-mixin";
 import { ApplicationCommandOptionMinMaxMixin } from "./mixins/application-command-option-minmax-mixin";
@@ -29,11 +30,13 @@ export interface ApplicationCommandNumberOptionOptions<R extends boolean>
 
 export interface ApplicationCommandNumberOption<R extends boolean>
   extends ApplicationCommandOptionRequiredMixin<R>,
-    ApplicationCommandOptionChoicesMixin<"Number">,
+    ApplicationCommandOptionChoicesMixin<number>,
     ApplicationCommandOptionAutocompleteMixin,
     ApplicationCommandOptionMinMaxMixin {}
 
-export class ApplicationCommandNumberOption<R extends boolean = false> extends ApplicationCommandOptionBase<ApplicationCommandOptionType.Number> {
+export class ApplicationCommandNumberOption<
+  R extends boolean = false
+> extends ApplicationCommandOptionBase<ApplicationCommandOptionType.Number> {
   constructor({
     name,
     description,
@@ -45,6 +48,17 @@ export class ApplicationCommandNumberOption<R extends boolean = false> extends A
       description,
     });
     Object.assign(this, options);
+  }
+
+  public toJSON(): NonPartial<ApplicationCommandNumberOptionAPI<R>> {
+    return {
+      ...super.toJSON(),
+      required: this.required,
+      autocomplete: this.autocomplete,
+      choices: this.choices,
+      min_value: this.min_value,
+      max_value: this.max_value,
+    };
   }
 }
 

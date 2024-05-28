@@ -8,7 +8,7 @@
     "dev": "bun --watch src/index.ts",
     "start": "bun src/index.ts",
     "start:build": "node dist/index.js",
-    "lint": "eslint",
+    "lint": "eslint ",
     "sync": "bun src/scripts/sync.ts"
   },
   "dependencies": {

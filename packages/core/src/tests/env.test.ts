@@ -1,6 +1,6 @@
 import { describe, expect, spyOn, test } from "bun:test";
-import { defineEnv } from "../utils/define-env";
 import { z } from "zod";
+import { defineEnv } from "../utils/define-env";
 
 describe("env.ts", () => {
   test("ignore undefined vars", () => {

@@ -2,6 +2,7 @@ import {
   type ApplicationCommandOption,
   type ApplicationCommandOptionAPI,
   type Handler,
+  type NonPartial,
   type Params,
 } from "../types";
 import { applyMixins } from "../utils/mixins";
@@ -10,7 +11,7 @@ import {
   ApplicationCommandType,
   type ApplicationCommandAPIBase,
 } from "./application-command";
-import { } from "./application-command-option";
+import {} from "./application-command-option";
 import { ApplicationCommandOptionSubCommandMixin } from "./mixins/application-command-subcommand-mixin";
 import {
   ApplicationCommandSubCommandGroupOption,
@@ -25,9 +26,8 @@ export interface ApplicationChatInputCommandAPI
   options?: ApplicationCommandOptionAPI[];
 }
 
-export interface ApplicationChatInputCommandOptions<
-  P extends Params
-> extends Omit<ApplicationChatInputCommandAPI, "type" | "options"> {
+export interface ApplicationChatInputCommandOptions<P extends Params>
+  extends Omit<ApplicationChatInputCommandAPI, "type" | "options"> {
   options?: P;
   handler?: Handler<P>;
 }
@@ -35,8 +35,7 @@ export interface ApplicationChatInputCommandOptions<
 export interface ApplicationChatInputCommand<
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   P extends Params
-> extends ApplicationCommandOptionSubCommandMixin {
-}
+> extends ApplicationCommandOptionSubCommandMixin {}
 
 /**
  * Application Command (ChatInput)
@@ -59,7 +58,7 @@ export class ApplicationChatInputCommand<
     handler,
     description,
     default_member_permissions,
-    nsfw
+    nsfw,
   }: ApplicationChatInputCommandOptions<P>) {
     super({
       type: ApplicationCommandType.ChatInput,
@@ -96,7 +95,7 @@ export class ApplicationChatInputCommand<
     return this;
   }
 
-  public toJSON(): ApplicationChatInputCommandAPI {
+  public toJSON(): NonPartial<ApplicationChatInputCommandAPI> {
     return {
       ...super.toJSON(),
       description: this.description,

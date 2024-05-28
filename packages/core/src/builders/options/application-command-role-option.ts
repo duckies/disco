@@ -1,12 +1,13 @@
 import {
+  ApplicationCommandOptionType,
+  type ApplicationCommandOptionWithRequired,
+  type NonPartial,
+} from "types";
+import { applyMixins } from "utils/mixins";
+import {
   ApplicationCommandOptionBase,
   type ApplicationCommandOptionAPIBase,
 } from "../application-command-option";
-import {
-  ApplicationCommandOptionType,
-  type ApplicationCommandOptionWithRequired,
-} from "../../types";
-import { applyMixins } from "../../utils/mixins";
 import { ApplicationCommandOptionRequiredMixin } from "./mixins/application-command-option-required-mixin";
 
 export interface ApplicationCommandRoleOptionAPI<R extends boolean>
@@ -18,7 +19,12 @@ export interface ApplicationCommandRoleOptionAPI<R extends boolean>
 export interface ApplicationCommandRoleOptionOptions<R extends boolean>
   extends Omit<ApplicationCommandRoleOptionAPI<R>, "type"> {}
 
-export class ApplicationCommandRoleOption<R extends boolean = false> extends ApplicationCommandOptionBase<ApplicationCommandOptionType.Role> {
+export interface ApplicationCommandRoleOption<R extends boolean>
+  extends ApplicationCommandOptionRequiredMixin<R> {}
+
+export class ApplicationCommandRoleOption<
+  R extends boolean = false
+> extends ApplicationCommandOptionBase<ApplicationCommandOptionType.Role> {
   constructor({
     name,
     description,
@@ -26,6 +32,13 @@ export class ApplicationCommandRoleOption<R extends boolean = false> extends App
   }: ApplicationCommandRoleOptionOptions<R>) {
     super({ type: ApplicationCommandOptionType.Role, name, description });
     Object.assign(this, options);
+  }
+
+  public toJSON(): NonPartial<ApplicationCommandRoleOptionAPI<R>> {
+    return {
+      ...super.toJSON(),
+      required: this.required,
+    };
   }
 }
 

@@ -1,16 +1,15 @@
 import {
-  ApplicationCommandOptionBase,
-  type ApplicationCommandOptionAPIBase,
-} from "../application-command-option";
-import {
   ApplicationCommandOptionType,
-  type ApplicationCommandOptionChoice,
   type ApplicationCommandOptionWithAutocomplete,
   type ApplicationCommandOptionWithChoices,
   type ApplicationCommandOptionWithRequired,
   type NonPartial,
-} from "../../types";
-import { applyMixins } from "../../utils/mixins";
+} from "types";
+import { applyMixins } from "utils/mixins";
+import {
+  ApplicationCommandOptionBase,
+  type ApplicationCommandOptionAPIBase,
+} from "../application-command-option";
 import { ApplicationCommandOptionAutocompleteMixin } from "./mixins/application-command-option-autocomplete-mixin";
 import { ApplicationCommandOptionChoicesMixin } from "./mixins/application-command-option-choices-mixin";
 import { ApplicationCommandOptionRequiredMixin } from "./mixins/application-command-option-required-mixin";
@@ -25,19 +24,20 @@ export interface ApplicationCommandStringOptionAPI<R extends boolean = boolean>
   max_length?: number;
 }
 
-export interface ApplicationCommandStringOptionOptions<R extends boolean = boolean>
-  extends Omit<ApplicationCommandStringOptionAPI<R>, "type"> {}
+export interface ApplicationCommandStringOptionOptions<
+  R extends boolean = boolean
+> extends Omit<ApplicationCommandStringOptionAPI<R>, "type"> {}
 
 export interface ApplicationCommandStringOption<R extends boolean = false>
   extends ApplicationCommandOptionRequiredMixin<R>,
-    ApplicationCommandOptionChoicesMixin<string> {}
+    ApplicationCommandOptionChoicesMixin<string>,
+    ApplicationCommandOptionAutocompleteMixin {}
 
-export class ApplicationCommandStringOption<R extends boolean> extends ApplicationCommandOptionBase<ApplicationCommandOptionType.String> {
-  public readonly required?: R;
+export class ApplicationCommandStringOption<
+  R extends boolean
+> extends ApplicationCommandOptionBase<ApplicationCommandOptionType.String> {
   public readonly min_length?: number;
   public readonly max_length?: number;
-  public readonly choices?: ApplicationCommandOptionChoice<string>[];
-  public readonly autocomplete?: boolean;
 
   constructor({
     name,
@@ -49,6 +49,8 @@ export class ApplicationCommandStringOption<R extends boolean> extends Applicati
       name,
       description,
     });
+
+    Object.assign(this, options);
 
     this.required = options.required;
     this.min_length = options.min_length;
@@ -65,7 +67,7 @@ export class ApplicationCommandStringOption<R extends boolean> extends Applicati
       required: this.required,
       choices: this.choices,
       autocomplete: this.autocomplete,
-    }
+    };
   }
 }
 

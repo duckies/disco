@@ -6,6 +6,7 @@ import { applyMixins } from "../../utils/mixins";
 import {
   ApplicationCommandOptionType,
   type ApplicationCommandOptionWithRequired,
+  type NonPartial,
 } from "../../types";
 import { ApplicationCommandOptionRequiredMixin } from "./mixins/application-command-option-required-mixin";
 
@@ -15,12 +16,16 @@ export interface ApplicationCommandAttachmentOptionAPI<R extends boolean>
   type: ApplicationCommandOptionType.Attachment;
 }
 
-export interface ApplicationCommandAttachmentOptionOptions<R extends boolean = false>
-  extends Omit<ApplicationCommandAttachmentOptionAPI<R>, "type"> {}
+export interface ApplicationCommandAttachmentOptionOptions<
+  R extends boolean = false
+> extends Omit<ApplicationCommandAttachmentOptionAPI<R>, "type"> {}
 
-export interface ApplicationCommandAttachmentOption<R extends boolean = false> extends ApplicationCommandOptionRequiredMixin<R> {}
+export interface ApplicationCommandAttachmentOption<R extends boolean = false>
+  extends ApplicationCommandOptionRequiredMixin<R> {}
 
-export class ApplicationCommandAttachmentOption<R extends boolean = false> extends ApplicationCommandOptionBase<ApplicationCommandOptionType.Attachment> {
+export class ApplicationCommandAttachmentOption<
+  R extends boolean = false
+> extends ApplicationCommandOptionBase<ApplicationCommandOptionType.Attachment> {
   constructor({
     name,
     description,
@@ -30,11 +35,11 @@ export class ApplicationCommandAttachmentOption<R extends boolean = false> exten
     Object.assign(this, options);
   }
 
-  public toJSON(): ApplicationCommandAttachmentOptionAPI<R> {
+  public toJSON(): NonPartial<ApplicationCommandAttachmentOptionAPI<R>> {
     return {
       ...super.toJSON(),
       required: this.required,
-    }
+    };
   }
 }
 

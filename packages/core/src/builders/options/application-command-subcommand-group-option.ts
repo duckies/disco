@@ -1,10 +1,10 @@
+import { ApplicationCommandOptionType, type NonPartial } from "types";
+import { applyMixins } from "utils/mixins";
 import {
   ApplicationCommandOptionBase,
   type ApplicationCommandOptionAPIBase,
 } from "../application-command-option";
 import { ApplicationCommandOptionSubCommandMixin } from "../mixins/application-command-subcommand-mixin";
-import { ApplicationCommandOptionType } from "../../types";
-import { applyMixins } from "../../utils/mixins";
 import type {
   ApplicationCommandSubCommandOption,
   ApplicationCommandSubCommandOptionAPI,
@@ -17,7 +17,10 @@ export interface ApplicationCommandSubCommandGroupOptionAPI
 }
 
 export interface ApplicationCommandSubCommandGroupOptionOptions
-  extends Omit<ApplicationCommandSubCommandGroupOptionAPI, "type"> {}
+  extends Omit<
+    ApplicationCommandSubCommandGroupOptionAPI,
+    "type" | "options"
+  > {}
 
 export interface ApplicationCommandSubCommandGroupOption
   extends ApplicationCommandOptionSubCommandMixin {}
@@ -28,11 +31,22 @@ export class ApplicationCommandSubCommandGroupOption extends ApplicationCommandO
     ApplicationCommandSubCommandOption<any>
   >;
 
-  constructor(options: ApplicationCommandSubCommandGroupOptionOptions) {
+  constructor({
+    name,
+    description,
+  }: ApplicationCommandSubCommandGroupOptionOptions) {
     super({
       type: ApplicationCommandOptionType.SubCommandGroup,
-      ...options,
+      name,
+      description,
     });
+  }
+
+  public toJSON(): NonPartial<ApplicationCommandSubCommandGroupOptionAPI> {
+    return {
+      ...super.toJSON(),
+      options: [...this.options.values()].map((option) => option.toJSON()),
+    };
   }
 }
 
