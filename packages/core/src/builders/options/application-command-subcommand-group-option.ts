@@ -1,5 +1,5 @@
-import { ApplicationCommandOptionType, type NonPartial } from "types";
-import { applyMixins } from "utils/mixins";
+import { ApplicationCommandOptionType, type NonPartial } from "../../types";
+import { applyMixins } from "../../utils/mixins";
 import {
   ApplicationCommandOptionBase,
   type ApplicationCommandOptionAPIBase,
@@ -42,7 +42,7 @@ export class ApplicationCommandSubCommandGroupOption extends ApplicationCommandO
     });
   }
 
-  public toJSON(): NonPartial<ApplicationCommandSubCommandGroupOptionAPI> {
+  public override toJSON(): NonPartial<ApplicationCommandSubCommandGroupOptionAPI> {
     return {
       ...super.toJSON(),
       options: [...this.options.values()].map((option) => option.toJSON()),

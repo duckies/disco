@@ -5,7 +5,7 @@ import {
   type Handler,
   type NonPartial,
   type Params,
-} from "types";
+} from "../../types";
 import {
   ApplicationCommandOptionBase,
   type ApplicationCommandOptionAPIBase,
@@ -48,7 +48,7 @@ export class ApplicationCommandSubCommandOption<
     }
   }
 
-  public toJSON(): NonPartial<ApplicationCommandSubCommandOptionAPI> {
+  public override toJSON(): NonPartial<ApplicationCommandSubCommandOptionAPI> {
     return {
       ...super.toJSON(),
       options: [...this.options.values()].map((o) => o.toJSON()),

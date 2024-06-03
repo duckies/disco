@@ -53,7 +53,7 @@ export class ApplicationCommandIntegerOption<
     Object.assign(this, options);
   }
 
-  public toJSON(): NonPartial<ApplicationCommandIntegerOptionAPI<R>> {
+  public override toJSON(): NonPartial<ApplicationCommandIntegerOptionAPI<R>> {
     return {
       ...super.toJSON(),
       required: this.required,

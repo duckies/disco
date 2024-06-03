@@ -1,9 +1,10 @@
-import {
-  type ApplicationCommandOption,
-  type ApplicationCommandOptionAPI,
-  type Handler,
-  type NonPartial,
-  type Params,
+import type { ChatInputCommandInteraction } from "discord.js";
+import type {
+  ApplicationCommandOption,
+  ApplicationCommandOptionAPI,
+  Handler,
+  NonPartial,
+  Params,
 } from "../types";
 import { applyMixins } from "../utils/mixins";
 import {
@@ -32,10 +33,8 @@ export interface ApplicationChatInputCommandOptions<P extends Params>
   handler?: Handler<P>;
 }
 
-export interface ApplicationChatInputCommand<
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  P extends Params
-> extends ApplicationCommandOptionSubCommandMixin {}
+export interface ApplicationChatInputCommand
+  extends ApplicationCommandOptionSubCommandMixin {}
 
 /**
  * Application Command (ChatInput)
@@ -43,7 +42,7 @@ export interface ApplicationChatInputCommand<
  * @see https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-structure
  */
 export class ApplicationChatInputCommand<
-  const P extends Params
+  const P extends Params = Params
 > extends ApplicationCommand {
   public readonly description: string;
   public readonly default_member_permissions?: string;
@@ -80,7 +79,7 @@ export class ApplicationChatInputCommand<
     }
   }
 
-  addSubCommandGroup(
+  public addSubCommandGroup(
     options: ApplicationCommandSubCommandGroupOptionOptions,
     callback?: (
       group: ApplicationCommandSubCommandGroupOption
@@ -95,7 +94,13 @@ export class ApplicationChatInputCommand<
     return this;
   }
 
-  public toJSON(): NonPartial<ApplicationChatInputCommandAPI> {
+  public async handleInteraction(interaction: ChatInputCommandInteraction) {
+    console.log(interaction.options.data);
+
+    await interaction.reply("Not yet implemented L102");
+  }
+
+  public override toJSON(): NonPartial<ApplicationChatInputCommandAPI> {
     return {
       ...super.toJSON(),
       description: this.description,

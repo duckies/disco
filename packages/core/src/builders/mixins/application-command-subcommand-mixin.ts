@@ -1,7 +1,4 @@
-import type {
-  ApplicationCommandOption,
-  Params
-} from "types";
+import type { ApplicationCommandOption, Params } from "../../types";
 import {
   ApplicationCommandSubCommandOption,
   type ApplicationCommandSubCommandOptionOptions,
@@ -10,9 +7,7 @@ import {
 export class ApplicationCommandOptionSubCommandMixin {
   public readonly options!: Map<string, ApplicationCommandOption>;
 
-  public addSubCommand<
-    const P extends Params
-  >(
+  public addSubCommand<const P extends Params>(
     options: ApplicationCommandSubCommandOptionOptions<P>,
     callback?: (
       subCommand: ApplicationCommandSubCommandOption<P>

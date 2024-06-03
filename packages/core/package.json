@@ -1,15 +1,26 @@
 {
   "name": "@duckies/discord",
-  "module": "src/index.ts",
-  "types": "dist/index.d.ts",
   "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "unbuild",
     "dev": "bun --watch src/index.ts",
     "start": "bun src/index.ts",
     "start:build": "node dist/index.js",
-    "lint": "eslint ",
-    "sync": "bun src/scripts/sync.ts"
+    "sync": "bun src/scripts/sync.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "discord.js": "14.15.2",
@@ -22,7 +33,9 @@
     "@types/eslint__js": "8.42.3",
     "eslint": "9.0.0",
     "eslint-plugin-import-x": "0.5.0",
+    "eslint-plugin-unicorn": "53.0.0",
     "typescript": "5.4.5",
-    "typescript-eslint": "8.0.0-alpha.18"
+    "typescript-eslint": "8.0.0-alpha.18",
+    "unbuild": "2.0.0"
   }
 }

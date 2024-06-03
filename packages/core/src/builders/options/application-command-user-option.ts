@@ -36,7 +36,7 @@ export class ApplicationCommandUserOption<
     Object.assign(this, options);
   }
 
-  public toJSON(): NonPartial<ApplicationCommandUserOptionAPI<R>> {
+  public override toJSON(): NonPartial<ApplicationCommandUserOptionAPI<R>> {
     return {
       ...super.toJSON(),
       required: this.required,

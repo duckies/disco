@@ -35,7 +35,9 @@ export class ApplicationCommandAttachmentOption<
     Object.assign(this, options);
   }
 
-  public toJSON(): NonPartial<ApplicationCommandAttachmentOptionAPI<R>> {
+  public override toJSON(): NonPartial<
+    ApplicationCommandAttachmentOptionAPI<R>
+  > {
     return {
       ...super.toJSON(),
       required: this.required,

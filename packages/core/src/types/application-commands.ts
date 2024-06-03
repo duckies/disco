@@ -1,26 +1,26 @@
-import {
-  type ApplicationCommandBooleanOption,
-  type ApplicationCommandIntegerOption,
-  type ApplicationCommandStringOption,
-  type ApplicationCommandSubCommandOption,
-  type ApplicationCommandAttachmentOption,
-  type ApplicationCommandAttachmentOptionAPI,
-  type ApplicationCommandBooleanOptionAPI,
-  type ApplicationCommandChannelOption,
-  type ApplicationCommandChannelOptionAPI,
-  type ApplicationCommandIntegerOptionAPI,
-  type ApplicationCommandMentionableOption,
-  type ApplicationCommandMentionableOptionAPI,
-  type ApplicationCommandNumberOption,
-  type ApplicationCommandNumberOptionAPI,
-  type ApplicationCommandRoleOption,
-  type ApplicationCommandRoleOptionAPI,
-  type ApplicationCommandStringOptionAPI,
-  type ApplicationCommandSubCommandGroupOption,
-  type ApplicationCommandSubCommandGroupOptionAPI,
-  type ApplicationCommandSubCommandOptionAPI,
-  type ApplicationCommandUserOption,
-  type ApplicationCommandUserOptionAPI,
+import type {
+  ApplicationCommandBooleanOption,
+  ApplicationCommandIntegerOption,
+  ApplicationCommandStringOption,
+  ApplicationCommandSubCommandOption,
+  ApplicationCommandAttachmentOption,
+  ApplicationCommandAttachmentOptionAPI,
+  ApplicationCommandBooleanOptionAPI,
+  ApplicationCommandChannelOption,
+  ApplicationCommandChannelOptionAPI,
+  ApplicationCommandIntegerOptionAPI,
+  ApplicationCommandMentionableOption,
+  ApplicationCommandMentionableOptionAPI,
+  ApplicationCommandNumberOption,
+  ApplicationCommandNumberOptionAPI,
+  ApplicationCommandRoleOption,
+  ApplicationCommandRoleOptionAPI,
+  ApplicationCommandStringOptionAPI,
+  ApplicationCommandSubCommandGroupOption,
+  ApplicationCommandSubCommandGroupOptionAPI,
+  ApplicationCommandSubCommandOptionAPI,
+  ApplicationCommandUserOption,
+  ApplicationCommandUserOptionAPI,
 } from "../builders/options";
 
 /**
@@ -40,7 +40,9 @@ export enum ApplicationCommandOptionType {
   Attachment = 11,
 }
 
-export type ApplicationCommandOptionWithRequired<R extends boolean | undefined = undefined> = {
+export type ApplicationCommandOptionWithRequired<
+  R extends boolean | undefined = undefined
+> = {
   required?: R;
 };
 

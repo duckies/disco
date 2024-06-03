@@ -38,7 +38,9 @@ export class ApplicationCommandMentionableOption<
     Object.assign(this, options);
   }
 
-  public toJSON(): NonPartial<ApplicationCommandMentionableOptionAPI<R>> {
+  public override toJSON(): NonPartial<
+    ApplicationCommandMentionableOptionAPI<R>
+  > {
     return {
       ...super.toJSON(),
       required: this.required,

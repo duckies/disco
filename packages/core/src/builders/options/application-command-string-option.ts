@@ -4,8 +4,8 @@ import {
   type ApplicationCommandOptionWithChoices,
   type ApplicationCommandOptionWithRequired,
   type NonPartial,
-} from "types";
-import { applyMixins } from "utils/mixins";
+} from "../../types";
+import { applyMixins } from "../../utils/mixins";
 import {
   ApplicationCommandOptionBase,
   type ApplicationCommandOptionAPIBase,
@@ -59,7 +59,7 @@ export class ApplicationCommandStringOption<
     this.autocomplete = options.autocomplete;
   }
 
-  public toJSON(): NonPartial<ApplicationCommandStringOptionAPI<R>> {
+  public override toJSON(): NonPartial<ApplicationCommandStringOptionAPI<R>> {
     return {
       ...super.toJSON(),
       max_length: this.max_length,

@@ -1,13 +1,5 @@
-import type { NonPartial } from "types";
-
-/**
- * @see https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-types
- */
-export enum ApplicationCommandType {
-  ChatInput = 1,
-  User = 2,
-  Message = 3,
-}
+import { ApplicationCommandType } from "discord.js";
+import type { NonPartial } from "../types";
 
 /**
  * @see https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-context-types
@@ -48,3 +40,5 @@ export abstract class ApplicationCommand {
     };
   }
 }
+
+export { ApplicationCommandType };

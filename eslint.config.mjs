@@ -1,11 +1,17 @@
 import js from "@eslint/js";
 import ts from "typescript-eslint";
+import unicorn from "eslint-plugin-unicorn";
 import * as importPlugin from "eslint-plugin-import-x";
 
 export default ts.config(
   js.configs.recommended,
   ...ts.configs.recommendedTypeChecked,
   ...ts.configs.stylisticTypeChecked,
+  {
+    rules: {
+      yoda: ["error"],
+    },
+  },
   {
     rules: {
       "@typescript-eslint/consistent-type-imports": [
@@ -26,12 +32,26 @@ export default ts.config(
         },
       ],
       "@typescript-eslint/no-empty-function": ["off"],
+      "@typescript-eslint/explicit-member-accessibility": [
+        "error",
+        {
+          overrides: {
+            constructors: "no-public",
+          },
+        },
+      ],
+      "@typescript-eslint/method-signature-style": ["error", "property"],
+      "@typescript-eslint/no-import-type-side-effects": ["error"],
+      "@typescript-eslint/ban-ts-comment": "error",
     },
   },
+  {},
   {
     name: "imports",
     plugins: {
       import: importPlugin,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      unicorn,
     },
     rules: {
       "import/first": "error",

@@ -5,8 +5,8 @@ import {
   type ApplicationCommandOptionWithMinMaxValues,
   type ApplicationCommandOptionWithRequired,
   type NonPartial,
-} from "types";
-import { applyMixins } from "utils/mixins";
+} from "../../types";
+import { applyMixins } from "../../utils/mixins";
 import {
   ApplicationCommandOptionBase,
   type ApplicationCommandOptionAPIBase,
@@ -50,7 +50,7 @@ export class ApplicationCommandNumberOption<
     Object.assign(this, options);
   }
 
-  public toJSON(): NonPartial<ApplicationCommandNumberOptionAPI<R>> {
+  public override toJSON(): NonPartial<ApplicationCommandNumberOptionAPI<R>> {
     return {
       ...super.toJSON(),
       required: this.required,

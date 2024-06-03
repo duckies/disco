@@ -39,7 +39,7 @@ export class ApplicationCommandBooleanOption<
     Object.assign(this, options);
   }
 
-  public toJSON(): NonPartial<ApplicationCommandBooleanOptionAPI<R>> {
+  public override toJSON(): NonPartial<ApplicationCommandBooleanOptionAPI<R>> {
     return {
       ...super.toJSON(),
       required: this.required,

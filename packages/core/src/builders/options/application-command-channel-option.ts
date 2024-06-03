@@ -57,7 +57,7 @@ export class ApplicationCommandChannelOption<
     Object.assign(this, options);
   }
 
-  public toJSON(): NonPartial<ApplicationCommandChannelOptionAPI<R>> {
+  public override toJSON(): NonPartial<ApplicationCommandChannelOptionAPI<R>> {
     return {
       ...super.toJSON(),
       required: this.required,

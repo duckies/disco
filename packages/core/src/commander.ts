@@ -1,22 +1,24 @@
-import { EventEmitter } from "node:events";
-import { join } from "node:path";
-import { glob } from "glob";
-
 import { InteractionType, type Interaction } from "discord.js";
 import { ApplicationChatInputCommand } from "./builders/application-chat-input-command";
-import type { Module } from "./types";
 import {
-  BotError,
-  InternalBotError,
-  UnhandledInteractionError,
-} from "./errors";
+  ApplicationCommandType,
+  type ApplicationCommand,
+} from "./builders/application-command";
+import { BotError, InternalBotError } from "./errors";
+import { Emitter } from "./utils/emitter";
+import { isArray } from "./utils/is";
 
 export interface CommanderOptions {
   /**
-   * The path to the directory containing the commands.
-   * @default "./src/commands"
+   * The path (or paths) to scan the filesystem or an array of commands to register.
+   * @default ./src/commands
    */
-  path: string;
+  commands?: string | string[] | ApplicationCommand[];
+  /**
+   * The current working directory for filesystem scanning.
+   * @default process.cwd()
+   */
+  cwd?: string;
 }
 
 export interface CommanderEvents {
@@ -24,84 +26,45 @@ export interface CommanderEvents {
   error: [error: BotError];
 }
 
-export interface Commander extends EventEmitter {
-  on<Event extends keyof CommanderEvents>(
-    event: Event,
-    listener: (...args: CommanderEvents[Event]) => void
-  ): this;
-
-  once<Event extends keyof CommanderEvents>(
-    event: Event,
-    listener: (...args: CommanderEvents[Event]) => void
-  ): this;
-
-  emit<Event extends keyof CommanderEvents>(
-    event: Event,
-    ...args: CommanderEvents[Event]
-  ): boolean;
-}
-
-export class Commander extends EventEmitter {
-  private readonly path: string;
-  private readonly interactions = new Map<
-    string,
-    ApplicationChatInputCommand<any>
-  >();
+export class Commander extends Emitter<CommanderEvents> {
+  public readonly commands = new Map<string, ApplicationChatInputCommand>();
 
   constructor(options?: CommanderOptions) {
     super();
-    this.path = options?.path ?? "./src/commands";
 
-    void this.scan();
-  }
-
-  public async scan() {
-    const filePaths = await glob("**/*.{ts,js}", {
-      cwd: join(process.cwd(), this.path),
-      nodir: true,
-      absolute: true,
-    });
-
-    for (const filePath of filePaths) {
-      const file = (await import(filePath)) as Module;
-      const command =
-        file.default instanceof ApplicationChatInputCommand
-          ? file.default
-          : null;
-
-      if (command) {
-        if (this.interactions.has(command.name)) {
-          throw new Error(`Command with name ${command.name} already exists`);
+    if (isArray(options?.commands)) {
+      for (const command of options.commands) {
+        if (!(command instanceof ApplicationChatInputCommand)) {
+          throw new Error(
+            "Commands must be an instance of ApplicationChatInputCommand"
+          );
         }
 
-        this.interactions.set(command.name, command);
+        // TODO: Check for name collisions.
+        this.commands.set(command.name, command);
       }
     }
-
-    this.emit("initialize", this.interactions);
   }
 
-  private getCommand(name: string) {
-    return this.interactions.get(name) ?? null;
-  }
-
-  public onInteraction(interaction: Interaction) {
-    console.log(interaction);
+  public async onInteraction(interaction: Interaction) {
     try {
       switch (interaction.type) {
         case InteractionType.ApplicationCommand: {
-          const name = interaction.commandName;
-          const command = this.getCommand(name);
-
-          if (!command) {
-            throw new UnhandledInteractionError(interaction);
+          switch (interaction.commandType) {
+            case ApplicationCommandType.ChatInput:
+              await this.commands
+                .get(interaction.commandName)
+                ?.handleInteraction(interaction);
+              break;
           }
-
-          // TODO: Handle the fucking interaction.
+          break;
         }
+        default:
+          throw new Error(`Unimplemented interaction ${interaction.id}`);
       }
     } catch (error) {
-      this.emit(
+      console.error(error);
+      void this.emit(
         "error",
         error instanceof BotError
           ? error

@@ -2,8 +2,8 @@ import {
   ApplicationCommandOptionType,
   type ApplicationCommandOptionWithRequired,
   type NonPartial,
-} from "types";
-import { applyMixins } from "utils/mixins";
+} from "../../types";
+import { applyMixins } from "../../utils/mixins";
 import {
   ApplicationCommandOptionBase,
   type ApplicationCommandOptionAPIBase,
@@ -34,7 +34,7 @@ export class ApplicationCommandRoleOption<
     Object.assign(this, options);
   }
 
-  public toJSON(): NonPartial<ApplicationCommandRoleOptionAPI<R>> {
+  public override toJSON(): NonPartial<ApplicationCommandRoleOptionAPI<R>> {
     return {
       ...super.toJSON(),
       required: this.required,

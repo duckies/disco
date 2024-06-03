@@ -1,10 +1,12 @@
 {
   "name": "@duckies/monorepo",
   "private": true,
+  "scripts": {
+    "lint": "eslint",
+    "dev": "bun --filter '*' dev",
+    "dev:prepare": "bun --filter '*' build --stub"
+  },
   "workspaces": [
     "packages/*"
-  ],
-  "scripts": {
-    "lint": "eslint"
-  }
+  ]
 }
