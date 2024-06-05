@@ -6,13 +6,13 @@ export type Listener<K extends keyof T, T extends EventMap<T>> = (
   ...args: T[K]
 ) => void | Promise<void>;
 
-export type Func = (...args: any[]) => void | Promise<void>;
+export type Fn = (...args: any[]) => void | Promise<void>;
 
 /**
  * Yet another EventEmitter implementation.
  */
 export class Emitter<T extends EventMap<T>> {
-  public readonly events = new Map<keyof T, Set<Func>>();
+  public readonly events = new Map<keyof T, Set<Fn>>();
 
   public on<K extends keyof T>(event: K, listener: Listener<K, T>): void {
     const listeners = this.events.get(event) ?? new Set();
