@@ -1,9 +1,25 @@
 {
   "compilerOptions": {
-    "types": ["@types/node"],
-    "noEmit": true,
+    "lib": ["ESNext"],
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleDetection": "force",
+    "moduleResolution": "bundler",
+    "verbatimModuleSyntax": true,
+    "newLine": "lf",
+    "stripInternal": true,
+    "strict": true,
     "allowJs": true,
+    "noImplicitReturns": true,
+    "noImplicitOverride": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "outDir": "dist",
+    "declaration": true
   },
-  "extends": "./tsconfig.base.json",
-  "include": ["eslint.config.mjs"]
+  "include": ["src/**/*", "example/**/*", "tsup.config.ts", "eslint.config.mjs"],
 }

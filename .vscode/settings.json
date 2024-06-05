@@ -1,8 +1,0 @@
-{
-  "Lua.diagnostics.globals": [
-    "aura_env",
-    "ElvUI_DuckTools",
-    "ICON_LIST"
-  ],
-  "typescript.tsdk": "node_modules/typescript/lib"
-}

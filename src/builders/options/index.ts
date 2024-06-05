@@ -1,3 +1,8 @@
+export * from "./mixins/application-command-option-autocomplete-mixin";
+export * from "./mixins/application-command-option-choices-mixin";
+export * from "./mixins/application-command-option-minmax-mixin";
+export * from "./mixins/application-command-option-required-mixin";
+
 export * from "./application-command-attachment-option";
 export * from "./application-command-boolean-option";
 export * from "./application-command-channel-option";

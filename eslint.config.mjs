@@ -4,16 +4,15 @@ import unicorn from "eslint-plugin-unicorn";
 import * as importPlugin from "eslint-plugin-import-x";
 
 export default ts.config(
+  {
+    ignores: ["**/dist/**"],
+  },
   js.configs.recommended,
   ...ts.configs.recommendedTypeChecked,
   ...ts.configs.stylisticTypeChecked,
   {
     rules: {
       yoda: ["error"],
-    },
-  },
-  {
-    rules: {
       "@typescript-eslint/consistent-type-imports": [
         "error",
         {
@@ -45,7 +44,6 @@ export default ts.config(
       "@typescript-eslint/ban-ts-comment": "error",
     },
   },
-  {},
   {
     name: "imports",
     plugins: {
@@ -66,12 +64,9 @@ export default ts.config(
   {
     languageOptions: {
       parserOptions: {
-        project: ["tsconfig.json", "packages/*/tsconfig.json"],
+        project: true,
         tsconfigRootDir: import.meta.dirname,
       },
     },
-  },
-  {
-    ignores: ["**/dist/"],
   }
 );

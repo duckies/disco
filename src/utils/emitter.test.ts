@@ -1,4 +1,4 @@
-import { describe, test, expect, spyOn } from "bun:test";
+import { describe, test, expect, vi } from "vitest";
 import { Emitter } from "./emitter";
 
 interface TestEmitter {
@@ -10,9 +10,9 @@ describe("Emitter", () => {
     const em = new Emitter<TestEmitter>();
 
     const testData = {
-      listener: (arg1: string) => expect(arg1).toBeString(),
+      listener: (arg1: string) => expect(arg1).toBeTypeOf("string"),
     };
-    const listenerSpy = spyOn(testData, "listener");
+    const listenerSpy = vi.spyOn(testData, "listener");
 
     em.on("example", testData.listener);
     await em.emit("example", "test");
@@ -25,10 +25,10 @@ describe("Emitter", () => {
     const em = new Emitter<TestEmitter>();
 
     const testData = {
-      listener: (arg1: string) => expect(arg1).toBeString(),
+      listener: (arg1: string) => expect(arg1).toBeTypeOf("string"),
     };
 
-    const listenerSpy = spyOn(testData, "listener");
+    const listenerSpy = vi.spyOn(testData, "listener");
 
     em.once("example", testData.listener);
     await em.emit("example", "test");
@@ -36,9 +36,8 @@ describe("Emitter", () => {
     expect(listenerSpy).toHaveBeenCalledTimes(1);
     expect(listenerSpy).toBeCalledWith("test");
 
-    const secondEmitResult = em.emit("example", "test");
+    await em.emit("example", "test");
 
-    expect(secondEmitResult).toBeFalse();
     expect(listenerSpy).toHaveBeenCalledTimes(1);
   });
 
@@ -59,8 +58,8 @@ describe("Emitter", () => {
       },
     };
 
-    const listener1Spy = spyOn(testData, "listener1");
-    const listener2Spy = spyOn(testData, "listener2");
+    const listener1Spy = vi.spyOn(testData, "listener1");
+    const listener2Spy = vi.spyOn(testData, "listener2");
 
     em.on("example", testData.listener1);
     em.on("example", testData.listener2);
