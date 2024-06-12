@@ -1,44 +1,28 @@
 import type {
-  ApplicationCommandBooleanOption,
-  ApplicationCommandIntegerOption,
-  ApplicationCommandStringOption,
-  ApplicationCommandSubCommandOption,
-  ApplicationCommandAttachmentOption,
-  ApplicationCommandAttachmentOptionAPI,
-  ApplicationCommandBooleanOptionAPI,
-  ApplicationCommandChannelOption,
-  ApplicationCommandChannelOptionAPI,
-  ApplicationCommandIntegerOptionAPI,
-  ApplicationCommandMentionableOption,
-  ApplicationCommandMentionableOptionAPI,
-  ApplicationCommandNumberOption,
-  ApplicationCommandNumberOptionAPI,
-  ApplicationCommandRoleOption,
-  ApplicationCommandRoleOptionAPI,
-  ApplicationCommandStringOptionAPI,
-  ApplicationCommandSubCommandGroupOption,
-  ApplicationCommandSubCommandGroupOptionAPI,
-  ApplicationCommandSubCommandOptionAPI,
-  ApplicationCommandUserOption,
-  ApplicationCommandUserOptionAPI,
+  AttachmentOption,
+  AttachmentOptionAPI,
+  BooleanOption,
+  BooleanOptionAPI,
+  ChannelOption,
+  ChannelOptionAPI,
+  IntegerOption,
+  IntegerOptionAPI,
+  MentionableOption,
+  MentionableOptionAPI,
+  NumberOption,
+  NumberOptionAPI,
+  RoleOption,
+  RoleOptionAPI,
+  StringOption,
+  StringOptionAPI,
+  SubcommandGroupOption,
+  SubcommandGroupOptionAPI,
+  SubcommandOption,
+  SubcommandOptionAPI,
+  UserOption,
+  UserOptionAPI,
 } from "../builders/options";
-
-/**
- * @see https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-option-type
- */
-export enum ApplicationCommandOptionType {
-  SubCommand = 1,
-  SubCommandGroup = 2,
-  String = 3,
-  Integer = 4,
-  Boolean = 5,
-  User = 6,
-  Channel = 7,
-  Role = 8,
-  Mentionable = 9,
-  Number = 10,
-  Attachment = 11,
-}
+import type { ApplicationCommandOptionType } from "./discordjs";
 
 export type ApplicationCommandOptionWithRequired<
   R extends boolean | undefined = undefined
@@ -67,34 +51,45 @@ export interface ApplicationCommandOptionWithMinMaxValues {
   max_value?: number;
 }
 
-export type ApplicationCommandSimpleOptionAPI<R extends boolean = any> =
-  | ApplicationCommandStringOptionAPI<R>
-  | ApplicationCommandIntegerOptionAPI<R>
-  | ApplicationCommandBooleanOptionAPI<R>
-  | ApplicationCommandUserOptionAPI<R>
-  | ApplicationCommandChannelOptionAPI<R>
-  | ApplicationCommandRoleOptionAPI<R>
-  | ApplicationCommandMentionableOptionAPI<R>
-  | ApplicationCommandNumberOptionAPI<R>
-  | ApplicationCommandAttachmentOptionAPI<R>;
+export type SimpleOptionAPI =
+  | StringOptionAPI
+  | IntegerOptionAPI
+  | BooleanOptionAPI
+  | UserOptionAPI
+  | ChannelOptionAPI
+  | RoleOptionAPI
+  | MentionableOptionAPI
+  | NumberOptionAPI
+  | AttachmentOptionAPI;
 
-export type ApplicationCommandOptionAPI =
-  | ApplicationCommandSimpleOptionAPI<any>
-  | ApplicationCommandSubCommandOptionAPI
-  | ApplicationCommandSubCommandGroupOptionAPI;
+export type CommandOptionAPI =
+  | SimpleOptionAPI
+  | SubcommandOptionAPI
+  | SubcommandGroupOptionAPI;
 
-export type ApplicationCommandSimpleOption<R extends boolean = boolean> =
-  | ApplicationCommandStringOption<R>
-  | ApplicationCommandIntegerOption<R>
-  | ApplicationCommandBooleanOption<R>
-  | ApplicationCommandUserOption<R>
-  | ApplicationCommandChannelOption<R>
-  | ApplicationCommandRoleOption<R>
-  | ApplicationCommandMentionableOption<R>
-  | ApplicationCommandNumberOption<R>
-  | ApplicationCommandAttachmentOption<R>;
+export type SimpleOption<Required extends boolean = boolean> =
+  | StringOption<Required>
+  | IntegerOption<Required>
+  | BooleanOption<Required>
+  | UserOption<Required>
+  | ChannelOption<Required>
+  | RoleOption<Required>
+  | MentionableOption<Required>
+  | NumberOption<Required>
+  | AttachmentOption<Required>;
 
-export type ApplicationCommandOption =
-  | ApplicationCommandSimpleOption
-  | ApplicationCommandSubCommandOption<any>
-  | ApplicationCommandSubCommandGroupOption;
+export type Option = SimpleOption | SubcommandOption | SubcommandGroupOption;
+
+export interface ApplicationCommandOptionMap {
+  [ApplicationCommandOptionType.Attachment]: AttachmentOption;
+  [ApplicationCommandOptionType.Boolean]: BooleanOption;
+  [ApplicationCommandOptionType.Channel]: ChannelOption;
+  [ApplicationCommandOptionType.Integer]: IntegerOption;
+  [ApplicationCommandOptionType.Mentionable]: MentionableOption;
+  [ApplicationCommandOptionType.Number]: NumberOption;
+  [ApplicationCommandOptionType.Role]: RoleOption;
+  [ApplicationCommandOptionType.String]: StringOption;
+  [ApplicationCommandOptionType.Subcommand]: SubcommandOption;
+  [ApplicationCommandOptionType.User]: UserOption;
+  [ApplicationCommandOptionType.SubcommandGroup]: SubcommandGroupOption;
+}

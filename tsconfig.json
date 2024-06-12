@@ -19,7 +19,11 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "outDir": "dist",
-    "declaration": true
+    "declaration": true,
+    "baseUrl": ".",
+    "paths": {
+      ":/*": ["src/*"]
+    }
   },
-  "include": ["src/**/*", "example/**/*", "tsup.config.ts", "eslint.config.mjs"],
+  "include": ["src/**/*", "example/**/*", "tsup.config.ts", "eslint.config.mjs", "shims.d.ts"],
 }

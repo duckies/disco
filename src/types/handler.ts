@@ -1,21 +1,18 @@
 import type {
+  ApplicationCommandOptionType,
   Attachment,
   Channel,
   ChatInputCommandInteraction,
   Role,
   User,
 } from "discord.js";
-import type { ApplicationCommandOptionBase } from "../builders/application-command-option";
-import type {
-  ApplicationCommandOption,
-  ApplicationCommandOptionType,
-  ApplicationCommandSimpleOption,
-} from "./application-commands";
+import { defineOption } from "..";
+import type { Option, SimpleOption } from "./application-commands";
 import type { Simplify } from "./utility";
 
 export interface ApplicationCommandOptionParameterType {
-  [ApplicationCommandOptionType.SubCommand]: never;
-  [ApplicationCommandOptionType.SubCommandGroup]: never;
+  [ApplicationCommandOptionType.Subcommand]: never;
+  [ApplicationCommandOptionType.SubcommandGroup]: never;
   [ApplicationCommandOptionType.String]: string;
   [ApplicationCommandOptionType.Integer]: number;
   [ApplicationCommandOptionType.Boolean]: boolean;
@@ -41,25 +38,31 @@ export interface OptionTypeMap {
   ApplicationCommandAttachmentOption: Attachment;
 }
 
-export type Params = Record<string, ApplicationCommandSimpleOption>;
+export const things = {
+  user: defineOption("user", { name: "user", description: "user thing " }),
+} satisfies Params;
 
-export type OptionType<O extends ApplicationCommandOption> =
-  O extends ApplicationCommandOptionBase<infer T>
-    ? ApplicationCommandOptionParameterType[T]
-    : never;
+export type Params = Record<string, SimpleOption>;
 
-export type ParamRequired<T extends ApplicationCommandOption> =
-  T extends ApplicationCommandSimpleOption<infer R> ? R : never;
+export type OptionType<O extends Option> = O extends {
+  type: infer T extends ApplicationCommandOptionType;
+}
+  ? ApplicationCommandOptionParameterType[T]
+  : never;
+
+export type ParamRequired<T extends Option> = T extends SimpleOption<infer R>
+  ? R
+  : never;
 
 export type ParamResult<P extends Params> = Simplify<
   {
-    [K in keyof P as ParamRequired<P[K]> extends true 
-      ? K : never]: OptionType<P[K]>;
+    [K in keyof P as ParamRequired<P[K]> extends true ? K : never]: OptionType<
+      P[K]
+    >;
   } & {
     [K in keyof P as ParamRequired<P[K]> extends false
-        ? K
-        : never
-      ]?: OptionType<P[K]>;
+      ? K
+      : never]?: OptionType<P[K]>;
   }
 >;
 
@@ -68,4 +71,6 @@ export interface InteractionContext<P extends Params> {
   params: ParamResult<P>;
 }
 
-export type Handler<P extends Params> = (ctx: InteractionContext<P>) => Promise<unknown>;
+export type Handler<P extends Params> = (
+  ctx: InteractionContext<P>
+) => Promise<unknown>;

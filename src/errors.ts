@@ -1,10 +1,14 @@
-import type { Interaction } from "discord.js";
+import type { ChatInputCommandInteraction, Interaction } from "discord.js";
 
 export interface BotErrorOptions {
   /**
    * The original cause of the error.
    */
   cause?: unknown;
+  /**
+   * The internal error message.
+   */
+  message?: string;
   /**
    * The reply to send to the user if the interaction is repliable.
    */
@@ -13,7 +17,7 @@ export interface BotErrorOptions {
 
 export class BotError extends Error {
   constructor(public readonly options?: BotErrorOptions) {
-    super();
+    super(options?.message, { cause: options?.cause });
 
     this.name = this.constructor.name;
   }
@@ -32,6 +36,30 @@ export class UnhandledInteractionError extends BotError {
   constructor(interaction: Interaction, options?: BotErrorOptions) {
     super(options);
     this.interaction = interaction;
+  }
+}
+
+export class CommandNotFoundError extends BotError {
+  constructor(
+    interaction: ChatInputCommandInteraction,
+    options?: BotErrorOptions
+  ) {
+    super({
+      message: `Command "${interaction.commandName} not found`,
+      ...options,
+    });
+  }
+}
+
+export class CommandOptionNotFoundError extends BotError {
+  constructor() {
+    super();
+  }
+}
+
+export class CommandOptionConflictError extends BotError {
+  constructor() {
+    super();
   }
 }
 

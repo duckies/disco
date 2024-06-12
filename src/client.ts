@@ -1,4 +1,5 @@
 import {
+  Events,
   Client as _Client,
   type ClientOptions as _ClientOptions,
 } from "discord.js";
@@ -19,6 +20,10 @@ export class Client extends _Client {
 
     this.commander = new Commander(options.commander);
 
-    // this.on("interactionCreate", this.commander.onInteraction.bind(this));
+    this.on(Events.InteractionCreate, (interaction) => {
+      void this.commander
+        .onInteraction(interaction)
+        .catch((e: Error) => console.error(e));
+    });
   }
 }

@@ -1,11 +1,14 @@
-import { ApplicationChatInputCommand, type ApplicationChatInputCommandOptions } from "../builders/application-chat-input-command";
+import {
+  ChatInputCommand,
+  type ChatInputCommandOptions,
+} from "../builders/chat-input-command";
 import type { Params } from "../types";
 
 /**
  * Creates a new `ApplicationChatInputCommand`.
  */
 export function defineCommand<const P extends Params>(
-  options: ApplicationChatInputCommandOptions<P>
+  options: ChatInputCommandOptions<P>
 ) {
-  return new ApplicationChatInputCommand(options);
+  return new ChatInputCommand(options);
 }

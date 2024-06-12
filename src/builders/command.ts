@@ -21,7 +21,7 @@ export interface ApplicationCommandAPIBase {
  *
  * @see https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-structure
  */
-export abstract class ApplicationCommand {
+export abstract class Command {
   public readonly type!: ApplicationCommandType;
   public readonly name!: string;
   public readonly contexts?: InteractionContextType[];
