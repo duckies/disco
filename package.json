@@ -1,41 +1,20 @@
 {
-  "name": "@duckies/disco",
-  "type": "module",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    }
-  },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.cjs",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "name": "@repo/monorepo",
+  "private": true,
   "scripts": {
-    "build": "tsup",
-    "dev": "tsx watch src/index.ts",
-    "dev:example": "node --import tsx --no-warnings --env-file .env.local --watch example/bot.ts",
-    "lint": "eslint",
-    "check-types": "tsc --noEmit",
-    "test": "vitest"
-  },
-  "dependencies": {
-    "discord.js": "^14.15.3",
-    "glob": "^10.4.1"
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "eslint"
   },
   "devDependencies": {
-    "@eslint/js": "^9.4.0",
+    "@eslint/js": "^9.6.0",
     "@types/eslint__js": "^8.42.3",
-    "eslint": "^9.4.0",
-    "eslint-plugin-import-x": "^0.5.1",
-    "eslint-plugin-unicorn": "^53.0.0",
-    "tsup": "^8.1.0",
-    "tsx": "^4.11.2",
-    "typescript": "^5.4.5",
-    "typescript-eslint": "^8.0.0-alpha.27",
-    "vitest": "^1.6.0"
+    "eslint": "^9.6.0",
+    "eslint-plugin-import-x": "^0.5.3",
+    "eslint-plugin-unicorn": "^54.0.0",
+    "turbo": "^2.0.6",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "8.0.0-alpha.39"
   },
-  "packageManager": "pnpm@9.1.4"
+  "packageManager": "pnpm@9.4.0+sha256.b6fd0bfda555e7e584ad7e56b30c68b01d5a04f9ee93989f4b93ca8473c49c74"
 }

@@ -10,8 +10,8 @@ lib-cov
 logs
 node_modules
 temp
+.turbo
 
-# Environment Variables
 .env
 .env.development.local
 .env.test.local

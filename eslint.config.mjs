@@ -49,7 +49,6 @@ export default ts.config(
     name: "imports",
     plugins: {
       import: importPlugin,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       unicorn,
     },
     rules: {
@@ -65,7 +64,10 @@ export default ts.config(
   {
     languageOptions: {
       parserOptions: {
-        project: true,
+        projectService: {
+          allowDefaultProject: ["./*.js", "./*.mjs", "./*.cjs"],
+          defaultProject: "./tsconfig.base.json",
+        },
         tsconfigRootDir: import.meta.dirname,
       },
     },

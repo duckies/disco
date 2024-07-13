@@ -1,0 +1,17 @@
+{
+  "name": "@repo/bot",
+  "private": true,
+  "main": "./src/bot.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch --env-file=.env.local ./src/bot.ts",
+    "sync": "tsx --env-file=.env.local ./src/scripts/sync.ts"
+  },
+  "dependencies": {
+    "@repo/disco": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "^4.11.2",
+    "typescript": "^5.5.3"
+  }
+}
