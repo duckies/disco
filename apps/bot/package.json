@@ -1,12 +1,12 @@
 {
   "name": "@repo/bot",
   "private": true,
-  "main": "./src/bot.ts",
+  "module": "./src/bot.ts",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch --env-file=.env.local ./src/bot.ts",
-    "start": "tsx --env-file=.env.local ./src/bot.ts",
-    "sync": "tsx --env-file=.env.local ./src/scripts/sync.ts",
+    "dev": "bun --watch ./src/bot.ts",
+    "start": "bun ./src/bot.ts",
+    "sync": "bun ./src/scripts/sync.ts",
     "check-types": "tsc --noEmit"
   },
   "dependencies": {

@@ -1,11 +1,10 @@
 {
   "name": "@repo/monorepo",
   "private": true,
+  "workspaces": ["apps/*", "packages/*"],
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
     "lint": "eslint",
-    "check-types": "turbo check-types"
+    "check-types": "bun --filter '*' check-types"
   },
   "devDependencies": {
     "@eslint/js": "^9.6.0",
@@ -13,9 +12,7 @@
     "eslint": "^9.6.0",
     "eslint-plugin-import-x": "^0.5.3",
     "eslint-plugin-unicorn": "^54.0.0",
-    "turbo": "^2.0.6",
     "typescript": "^5.5.3",
     "typescript-eslint": "8.0.0-alpha.39"
-  },
-  "packageManager": "pnpm@9.4.0+sha256.b6fd0bfda555e7e584ad7e56b30c68b01d5a04f9ee93989f4b93ca8473c49c74"
+  }
 }
