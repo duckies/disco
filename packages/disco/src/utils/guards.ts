@@ -1,7 +1,9 @@
-import { ChatInputCommand, SubcommandGroupOption, SubcommandOption } from "..";
+import { ApplicationCommandOptionBase, ChatInputCommand, SubcommandGroupOption, SubcommandOption, type SimpleOption } from "..";
 
 export const isArray = (value: unknown): value is unknown[] =>
   Array.isArray(value);
+
+export const isString = (value: unknown): value is string => typeof value === "string";
 
 export const isCommand = (value: unknown): value is ChatInputCommand =>
   value instanceof ChatInputCommand;
@@ -12,3 +14,6 @@ export const isSubcommandGroup = (
 
 export const isSubcommand = (value: unknown): value is SubcommandOption =>
   value instanceof SubcommandOption;
+
+export const isSimpleOption = (value: unknown): value is SimpleOption => 
+(value instanceof ApplicationCommandOptionBase && !(isSubcommand(value) || isSubcommandGroup(value)));

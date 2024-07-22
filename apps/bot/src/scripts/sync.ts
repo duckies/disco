@@ -1,5 +1,4 @@
-import { commands } from "../commands";
+import { syncCommands } from "@repo/disco";
+import { client } from "../client";
 
-await import("@repo/disco").then(async ({ syncCommands }) => {
-  await syncCommands(commands);
-});
+await syncCommands([...client.commander.commands.values()]);

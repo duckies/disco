@@ -1,4 +1,6 @@
 import type { ChatInputCommandInteraction, Interaction } from "discord.js";
+import { isString } from "./utils/guards";
+import type { ChatInputCommand, SubcommandOption } from ".";
 
 export interface BotErrorOptions {
   /**
@@ -16,8 +18,12 @@ export interface BotErrorOptions {
 }
 
 export class BotError extends Error {
-  constructor(public readonly options?: BotErrorOptions) {
-    super(options?.message, { cause: options?.cause });
+  constructor(public readonly optionsOrMessage?: BotErrorOptions | string) {
+    if (isString(optionsOrMessage)) {
+      super(optionsOrMessage)
+    } else {
+      super(optionsOrMessage?.message, { cause: optionsOrMessage?.cause });
+    }
 
     this.name = this.constructor.name;
   }
@@ -51,15 +57,33 @@ export class CommandNotFoundError extends BotError {
   }
 }
 
+export interface BotCommandErrorOptions extends BotErrorOptions {
+  command: ChatInputCommand | SubcommandOption;
+}
+
+export class BotCommandError extends BotError {
+  public readonly command;
+
+  constructor({ command, ...botErrorOptions}: BotCommandErrorOptions) {
+    super(botErrorOptions);
+
+    this.command = command;
+  }
+}
+
 export class CommandOptionNotFoundError extends BotError {
-  constructor() {
-    super();
+  constructor(public readonly option: string, options?: BotErrorOptions | string) {
+    super(options);
   }
 }
 
 export class CommandOptionConflictError extends BotError {
-  constructor() {
-    super();
+  constructor(
+    public readonly option: string,
+    // public readonly expectedType: ApplicationCommandOptionType,
+    // public readonly type: ApplicationCommandOptionType, 
+    options?: BotErrorOptions | string) {
+    super(options);
   }
 }
 

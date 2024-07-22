@@ -4,37 +4,40 @@ import {
   type CommandInteractionOption,
 } from "discord.js";
 import {
-  CommandOptionConflictError,
-  CommandOptionNotFoundError,
+  BotError
 } from "../errors";
 import type {
   CommandOptionAPI,
   Handler,
   NonPartial,
   Option,
-  Params,
+  Params
 } from "../types";
-import { Manifest } from "../utils/manifest";
+import { applyMixins } from "../utils";
+import { isArray, isSubcommand, isSubcommandGroup } from "../utils/guards";
 import {
   ApplicationCommandType,
   Command,
   type ApplicationCommandAPIBase,
 } from "./command";
-import { SubcommandOption, UserOption } from "./options";
-import { SubcommandGroupOption } from "./options/subcommand-group";
+import { OptionsMixin } from "./mixins/options-mixin";
+import { UserOption, type SubcommandOption } from "./options";
+import type { SubcommandGroupOption } from "./options/subcommand-group";
 
 export interface ChatInputCommandDTO extends ApplicationCommandAPIBase {
   description: string;
   default_member_permissions?: string;
   nsfw?: boolean;
-  options?: CommandOptionAPI[];
+  options?: CommandOptionAPI[] | (SubcommandOption | SubcommandGroupOption)[];
 }
 
 export interface ChatInputCommandOptions<P extends Params>
   extends Omit<ChatInputCommandDTO, "type" | "options"> {
-  options?: P;
+  options?: P | (SubcommandOption | SubcommandGroupOption)[];
   handler?: Handler<P>;
 }
+
+export interface ChatInputCommand extends OptionsMixin<Option> {}
 
 /**
  * Application Command (ChatInput)
@@ -45,7 +48,7 @@ export class ChatInputCommand<const P extends Params = any> extends Command {
   public readonly description: string;
   public readonly default_member_permissions?: string;
   public readonly nsfw?: boolean;
-  public readonly options = new Manifest<Option>();
+  public readonly options = new Map<string, Option>();
   public readonly handler?: Handler<P>;
 
   constructor({
@@ -68,11 +71,14 @@ export class ChatInputCommand<const P extends Params = any> extends Command {
     this.default_member_permissions = default_member_permissions;
     this.nsfw = nsfw;
 
-    Object.values(options ?? {}).forEach((o) => this.options.add(o));
+    if (options) {
+      const _options = isArray(options) ? options : Object.values(options);
+      _options.forEach(o => this.addOption(o));
+    }
   }
 
   private _getContext(
-    command: ChatInputCommand<any> | SubcommandGroupOption | SubcommandOption,
+    command: ChatInputCommand | SubcommandGroupOption | SubcommandOption,
     data: readonly CommandInteractionOption[],
     params: Record<string, unknown> = {}
   ): {
@@ -80,24 +86,15 @@ export class ChatInputCommand<const P extends Params = any> extends Command {
     params: Record<string, unknown>;
   } {
     for (const { name, type, ...metadata } of data) {
-      const option = command.options.get(name);
-
-      if (!option) {
-        throw new CommandOptionNotFoundError();
-      }
-
-      if (option.type !== type) {
-        throw new CommandOptionConflictError();
-      }
-
-      if (
-        option instanceof SubcommandOption ||
-        option instanceof SubcommandGroupOption
-      ) {
+      const option = command.getOption(name, type);
+      
+      if (isSubcommand(option) || isSubcommandGroup(option)) {
         return this._getContext(option, metadata.options ?? [], params);
       }
-
+      
+      // FIXME: This needs to be punted to the option.
       if (option instanceof UserOption) {
+        // TODO: Include a way of adding or differentiating member vs user.
         params[name] = metadata.user;
       } else if (option instanceof SlashCommandRoleOption) {
         params[name] = metadata.role;
@@ -110,13 +107,13 @@ export class ChatInputCommand<const P extends Params = any> extends Command {
   }
 
   private getContext(interaction: ChatInputCommandInteraction) {
-    const { command, params } = this._getContext(
-      this,
-      interaction.options.data
-    );
+    const { command, params } = this._getContext(this, interaction.options.data);
 
     if (!command.handler) {
-      throw new Error(`Command ${command.name} has no handler`);
+      throw new BotError({
+        message: `${command.toString()} has no handler`,
+        reply: `This command is not yet implemented 🚧`
+      })
     }
 
     return { context: { interaction, params }, handler: command.handler };
@@ -130,6 +127,7 @@ export class ChatInputCommand<const P extends Params = any> extends Command {
     } catch (error) {
       console.error(error);
 
+      // TODO: If the reply is deferred, edit the message with the error.
       if (!interaction.replied) {
         await interaction.reply({
           content: "An error occurred, try again later.",
@@ -149,4 +147,10 @@ export class ChatInputCommand<const P extends Params = any> extends Command {
       options: [...this.options.values()].map((option) => option.toJSON()),
     };
   }
+
+  public override toString() {
+    return `ChatInputCommand<${this.name}>`
+  }
 }
+
+applyMixins(ChatInputCommand, [OptionsMixin])

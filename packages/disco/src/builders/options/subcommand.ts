@@ -6,10 +6,12 @@ import {
   type SimpleOption,
   type SimpleOptionAPI,
 } from "../../types";
+import { applyMixins } from "../../utils";
 import {
   ApplicationCommandOptionBase,
   type ApplicationCommandOptionAPIBase,
 } from "../command-option";
+import { OptionsMixin } from "../mixins/options-mixin";
 
 export interface SubcommandOptionAPI
   extends ApplicationCommandOptionAPIBase<ApplicationCommandOptionType.Subcommand> {
@@ -22,6 +24,8 @@ export interface SubcommandOptionOptions<P extends Params>
   options?: P;
   handler?: Handler<P>;
 }
+
+export interface SubcommandOption extends OptionsMixin<SimpleOption> {}
 
 export class SubcommandOption<
   const P extends Params = any
@@ -40,13 +44,7 @@ export class SubcommandOption<
 
     this.handler = handler;
 
-    for (const [name, option] of Object.entries(options ?? {})) {
-      if (this.options.has(name)) {
-        throw new Error(`Option with name ${name} already exists`);
-      }
-
-      this.options.set(name, option);
-    }
+    Object.values(options ?? {}).forEach(o => this.addOption(o))
   }
 
   public override toJSON(): NonPartial<SubcommandOptionAPI> {
@@ -55,4 +53,10 @@ export class SubcommandOption<
       options: [...this.options.values()].map((o) => o.toJSON()),
     };
   }
+
+  public override toString() {
+    return `SubcommandOption<${this.name}>`;
+  }
 }
+
+applyMixins(SubcommandOption, [OptionsMixin]);

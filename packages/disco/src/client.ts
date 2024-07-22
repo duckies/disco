@@ -15,6 +15,10 @@ export interface ClientOptions extends _ClientOptions {
 export class Client extends _Client {
   public readonly commander: Commander;
 
+  public get commands() {
+    return Array.from(this.commander.commands.values())
+  }
+
   constructor(options: ClientOptions) {
     super(options);
 

@@ -1,9 +1,10 @@
-import { CommandOptionNotFoundError } from "../../errors";
 import { ApplicationCommandOptionType, type NonPartial } from "../../types";
+import { applyMixins } from "../../utils";
 import {
   ApplicationCommandOptionBase,
   type ApplicationCommandOptionAPIBase,
 } from "../command-option";
+import { OptionsMixin } from "../mixins/options-mixin";
 import type { SubcommandOption, SubcommandOptionAPI } from "./subcommand";
 
 export interface SubcommandGroupOptionAPI
@@ -14,6 +15,8 @@ export interface SubcommandGroupOptionAPI
 
 export interface SubcommandGroupOptionOptions
   extends Omit<SubcommandGroupOptionAPI, "type" | "options"> {}
+
+export interface SubcommandGroupOption extends OptionsMixin<SubcommandOption> {}
 
 export class SubcommandGroupOption extends ApplicationCommandOptionBase {
   public readonly type = ApplicationCommandOptionType.SubcommandGroup;
@@ -26,20 +29,16 @@ export class SubcommandGroupOption extends ApplicationCommandOptionBase {
     });
   }
 
-  public getOption(name: string) {
-    const option = this.options.get(name);
-
-    if (!option) {
-      throw new CommandOptionNotFoundError();
-    }
-
-    return option;
-  }
-
   public override toJSON(): NonPartial<SubcommandGroupOptionAPI> {
     return {
       ...super.toJSON(),
       options: [...this.options.values()].map((option) => option.toJSON()),
     };
   }
+
+  public override toString() {
+    return `SubcommandGroupOption<${this.name}>`
+  }
 }
+
+applyMixins(SubcommandGroupOption, [OptionsMixin])
