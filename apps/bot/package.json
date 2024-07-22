@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch --env-file=.env.local ./src/bot.ts",
+    "start": "tsx --env-file=.env.local ./src/bot.ts",
     "sync": "tsx --env-file=.env.local ./src/scripts/sync.ts",
     "check-types": "tsc --noEmit"
   },
