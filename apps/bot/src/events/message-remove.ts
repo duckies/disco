@@ -1,3 +1,4 @@
+import { Readable } from "stream";
 import { defineEventListener } from "@repo/disco";
 import type { APIEmbed, APIEmbedField } from "discord.js";
 import { COLORS } from "../constants";
@@ -6,7 +7,7 @@ import { env } from "../env";
 export const onMessageDelete = defineEventListener({
   event: "messageDelete",
   listener: async (message) => {
-    if (!message.inGuild()) return;
+    if (!message.inGuild() || message.partial) return;
     if (!env.GUILD.CHANNELS.ON_MESSAGE_REMOVE) return;
 
     const channel = message.guild.channels.cache.get(env.GUILD.CHANNELS.ON_MESSAGE_REMOVE);
@@ -40,6 +41,10 @@ export const onMessageDelete = defineEventListener({
 
     await channel.send({
       embeds: [embed, ...message.embeds.slice(0, 4)],
+      files: [{
+        name: "message.json",
+        attachment: Readable.from([JSON.stringify({...message, partial: message.partial}, null, 2)])
+      }]
     })
   }
 })
