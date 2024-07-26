@@ -1,4 +1,5 @@
-import { defineEventListener, type APIEmbed, type APIEmbedField } from "@repo/disco";
+import { defineEventListener } from "@repo/disco";
+import type { APIEmbed, APIEmbedField } from "discord.js";
 import { COLORS } from "../constants";
 import { env } from "../env";
 

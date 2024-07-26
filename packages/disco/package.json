@@ -13,7 +13,6 @@
     "test": "vitest"
   },
   "dependencies": {
-    "discord.js": "^14.15.3",
     "glob": "^10.4.1"
   },
   "devDependencies": {
@@ -22,5 +21,8 @@
     "tsx": "^4.11.2",
     "typescript": "^5.5.3",
     "vitest": "^1.6.0"
+  },
+  "peerDependencies": {
+    "discord.js": "^14.15.3"
   }
 }

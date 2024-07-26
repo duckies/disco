@@ -1,4 +1,4 @@
-import type { ApplicationCommandOptionType } from "../types";
+import type { ApplicationCommandOptionType } from "discord.js";
 
 export interface ApplicationCommandOptionAPIBase<
   T extends ApplicationCommandOptionType = any

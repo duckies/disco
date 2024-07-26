@@ -1,4 +1,5 @@
-import { Client, Partials } from "@repo/disco";
+import { Client } from "@repo/disco";
+import { Partials } from "discord.js";
 import { PingCommand } from "./commands/ping";
 import { WarcraftLogsCommand } from "./commands/warcraftlogs/wcl";
 import { onMessageDelete } from "./events/message-remove";

@@ -1,3 +1,4 @@
+import type { ApplicationCommandOptionType } from "discord.js";
 import type {
   AttachmentOption,
   AttachmentOptionAPI,
@@ -22,7 +23,6 @@ import type {
   UserOption,
   UserOptionAPI,
 } from "../builders/options";
-import type { ApplicationCommandOptionType } from "./discordjs";
 
 export type ApplicationCommandOptionWithRequired<
   R extends boolean | undefined = undefined

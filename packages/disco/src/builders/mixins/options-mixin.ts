@@ -1,4 +1,5 @@
-import { type ApplicationCommandOptionType, CommandOptionConflictError, CommandOptionNotFoundError, type Option } from "../..";
+import type { ApplicationCommandOptionType } from "discord.js";
+import { CommandOptionConflictError, CommandOptionNotFoundError, type Option } from "../..";
 
 export abstract class OptionsMixin<T extends Option> {
   public abstract readonly options: Map<string, T>;

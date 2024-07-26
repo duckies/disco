@@ -1,10 +1,10 @@
-import {
-  ApplicationCommandOptionType,
-  type Handler,
-  type NonPartial,
-  type Params,
-  type SimpleOption,
-  type SimpleOptionAPI,
+import { ApplicationCommandOptionType } from "discord.js";
+import type {
+  Handler,
+  NonPartial,
+  Params,
+  SimpleOption,
+  SimpleOptionAPI,
 } from "../../types";
 import { applyMixins } from "../../utils";
 import {

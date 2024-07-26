@@ -1,11 +1,11 @@
+import { ApplicationCommandOptionType } from "discord.js";
 import {
   ApplicationCommandOptionBase,
   type ApplicationCommandOptionAPIBase,
 } from "../command-option";
-import {
-  ApplicationCommandOptionType,
-  type ApplicationCommandOptionWithRequired,
-  type NonPartial,
+import type {
+  ApplicationCommandOptionWithRequired,
+  NonPartial,
 } from "../../types";
 import { applyMixins } from "../../utils/mixins";
 import { RequiredMixin } from "./mixins/required";

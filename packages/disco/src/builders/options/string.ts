@@ -1,9 +1,9 @@
-import {
-  ApplicationCommandOptionType,
-  type ApplicationCommandOptionWithAutocomplete,
-  type ApplicationCommandOptionWithChoices,
-  type ApplicationCommandOptionWithRequired,
-  type NonPartial,
+import { ApplicationCommandOptionType } from "discord.js";
+import type {
+  ApplicationCommandOptionWithAutocomplete,
+  ApplicationCommandOptionWithChoices,
+  ApplicationCommandOptionWithRequired,
+  NonPartial,
 } from "../../types";
 import { applyMixins } from "../../utils/mixins";
 import {
