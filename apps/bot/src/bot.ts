@@ -7,6 +7,7 @@ async function bootstrap() {
   // Print commands.
   // console.log(JSON.stringify(client.commands, null, 2))
 
+
   await client.login(env.DISCORD.BOT_TOKEN);
 }
 

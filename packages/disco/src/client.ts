@@ -4,9 +4,11 @@ import {
   type ClientOptions as _ClientOptions,
 } from "discord.js";
 import { Commander, type CommanderOptions } from "./commander";
+import type { EventListener } from "./hooks/events";
 
 export interface ClientOptions extends _ClientOptions {
   commander?: CommanderOptions;
+  listeners?: EventListener[];
 }
 
 /**
@@ -29,5 +31,15 @@ export class Client extends _Client {
         .onInteraction(interaction)
         .catch((e: Error) => console.error(e));
     });
+
+    if (options.listeners) {
+      options.listeners.forEach((listener) => {
+        if (listener.once) {
+          this.once(listener.event, listener.listener);
+        } else {
+          this.on(listener.event, listener.listener);
+        }
+      })
+    }
   }
 }
