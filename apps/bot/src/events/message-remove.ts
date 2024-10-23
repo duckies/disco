@@ -14,6 +14,9 @@ export const onMessageDelete = defineEventListener({
 
     if (!channel?.isTextBased()) return;
 
+    // Attachments are immediately unavailable, so a message with only attachments has no loggable content.
+    if (!message.content && !message.embeds.length) return;
+
     const embed = {
       title: "Message Deleted",
       color: COLORS.PEACH_FUZZ,
@@ -41,10 +44,11 @@ export const onMessageDelete = defineEventListener({
 
     await channel.send({
       embeds: [embed, ...message.embeds.slice(0, 4)],
-      files: [{
-        name: "message.json",
-        attachment: Readable.from([JSON.stringify({...message, partial: message.partial}, null, 2)])
-      }]
+      // Debug: Send the payload as an attachment.
+      // files: [{
+      //   name: "message.json",
+      //   attachment: Readable.from([JSON.stringify({...message, partial: message.partial}, null, 2)])
+      // }]
     })
   }
 })
