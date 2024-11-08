@@ -1,4 +1,3 @@
-import { Readable } from "stream";
 import { defineEventListener } from "@repo/disco";
 import type { APIEmbed, APIEmbedField } from "discord.js";
 import { COLORS } from "../constants";

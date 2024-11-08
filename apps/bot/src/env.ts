@@ -8,7 +8,8 @@ const envSchema = z.object({
     ID: z.string(),
     MESSAGE_CACHE: z.string().array().optional(),
     CHANNELS: z.object({
-      ON_MESSAGE_REMOVE: z.string().optional()
+      ON_MESSAGE_REMOVE: z.string().optional(),
+      NOTIFICATIONS: z.string().optional()
     })
   })
 });
@@ -21,7 +22,8 @@ export const env = envSchema.parse({
     ID: process.env.GUILD_ID,
     MESSAGE_CACHE: process.env.GUILD_CHANNELS_MESSAGE_CACHE?.split(','),
     CHANNELS: {
-      ON_MESSAGE_REMOVE: process.env.GUILD_CHANNELS_ON_MESSAGE_REMOVE
+      ON_MESSAGE_REMOVE: process.env.GUILD_CHANNELS_ON_MESSAGE_REMOVE,
+      NOTIFICATIONS: process.env.GUILD_CHANNELS_NOTIFICATIONS
     }
   }
 });
