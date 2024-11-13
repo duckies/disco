@@ -6,8 +6,8 @@ import { onMessageDelete } from "./events/message-remove";
 import { onMemberRemove } from "./events/member-remove";
 
 export const client = new Client({
-  intents: ["Guilds", "GuildMessages", "MessageContent", "GuildVoiceStates"],
-  partials: [Partials.Message],
+  intents: ["Guilds", "GuildMessages", "MessageContent", "GuildVoiceStates", "GuildMembers"],
+  partials: [Partials.Message, Partials.GuildMember],
   commander: {
     commands: [PingCommand, WarcraftLogsCommand],
   },

@@ -6,7 +6,6 @@ import { env } from "../env";
 export const onMemberRemove = defineEventListener({
   event: "guildMemberRemove",
   listener: async (member) => {
-
     if (!env.GUILD.CHANNELS.NOTIFICATIONS) return;
 
     const channel = member.guild.channels.cache.get(env.GUILD.CHANNELS.NOTIFICATIONS);
