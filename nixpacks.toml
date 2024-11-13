@@ -1,0 +1,15 @@
+[phases.setup]
+# Bun v1.1.31
+nixPkgsArchive = "d13c9db8c31172de7dc424ca7d78fb08ed2dcc40"
+nixPkgs = ['...', "bun"]
+
+[phases.install]
+cmds = ["bun -v", "bun install --production"]
+
+[phases.build]
+cmds = [
+  "bun build ./apps/bot/src/bot.ts --compile --minify --sourcemap --outfile ./apps/bot/dist/bot",
+]
+
+[start]
+cmd = "./apps/bot/dist/bot"

@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "bun --watch ./src/bot.ts",
-    "start": "bun ./src/bot.ts",
+    "build": "bun build ./src/bot.ts --compile --minify --sourcemap --outfile ./dist/bot",
+    "start": "./dist/bot",
     "sync": "bun ./src/scripts/sync.ts",
     "check-types": "tsc --noEmit"
   },
