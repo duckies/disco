@@ -1,10 +1,10 @@
 [phases.setup]
 # Bun v1.1.31
-nixPkgsArchive = "d13c9db8c31172de7dc424ca7d78fb08ed2dcc40"
+nixPkgsArchive = "c29012c10c2a8d2ad65702f560c77cc7004a1cf9"
 nixPkgs = ['...', "bun"]
 
 [phases.install]
-cmds = ["bun -v", "bun install --production"]
+cmds = ["bun install --production"]
 
 [phases.build]
 cmds = [
