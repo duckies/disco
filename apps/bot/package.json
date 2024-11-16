@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "bun --watch ./src/bot.ts",
-    "build": "bun build --compile --minify --sourcemap --target=bun-linux-x64-baseline ./src/bot.ts --outfile ./dist/bot",
+    "build": "bun build --compile --sourcemap --target=bun-linux-x64-baseline ./src/bot.ts --outfile ./dist/bot",
     "start": "./dist/bot",
     "sync": "bun ./src/scripts/sync.ts",
     "check-types": "tsc --noEmit"
