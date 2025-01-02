@@ -1,76 +1,77 @@
-import {
-  AttachmentOption,
-  BooleanOption,
-  ChannelOption,
-  IntegerOption,
-  MentionableOption,
-  NumberOption,
-  RoleOption,
-  StringOption,
-  UserOption,
-  type AttachmentOptionOptions,
-  type BooleanOptionOptions,
-  type ChannelOptionOptions,
-  type IntegerOptionOptions,
-  type MentionableOptionOptions,
-  type NumberOptionOptions,
-  type RoleOptionOptions,
-  type StringOptionOptions,
-  type UserOptionOptions,
-} from "../builders/options";
 import type { IsRequired } from "../types";
 
-export type ApplicationCommandOptionTypeName =
-  | "string"
-  | "integer"
-  | "boolean"
-  | "user"
-  | "channel"
-  | "role"
-  | "mentionable"
-  | "number"
-  | "attachment";
+import {
+  AttachmentOption,
+  type AttachmentOptionOptions,
+  BooleanOption,
+  type BooleanOptionOptions,
+  ChannelOption,
+  type ChannelOptionOptions,
+  IntegerOption,
+  type IntegerOptionOptions,
+  MentionableOption,
+  type MentionableOptionOptions,
+  NumberOption,
+  type NumberOptionOptions,
+  RoleOption,
+  type RoleOptionOptions,
+  StringOption,
+  type StringOptionOptions,
+  UserOption,
+  type UserOptionOptions,
+} from "../builders/options";
 
 export interface ApplicationCommandOptionsByType<R extends boolean> {
-  string: StringOptionOptions<R>;
-  integer: IntegerOptionOptions<R>;
+  attachment: AttachmentOptionOptions<R>;
   boolean: BooleanOptionOptions<R>;
-  user: UserOptionOptions<R>;
   channel: ChannelOptionOptions<R>;
-  role: RoleOptionOptions<R>;
+  integer: IntegerOptionOptions<R>;
   mentionable: MentionableOptionOptions<R>;
   number: NumberOptionOptions<R>;
-  attachment: AttachmentOptionOptions<R>;
+  role: RoleOptionOptions<R>;
+  string: StringOptionOptions<R>;
+  user: UserOptionOptions<R>;
 }
 
 export interface ApplicationCommandOptionsReturnByType<R extends boolean> {
-  string: StringOption<R>;
-  integer: IntegerOption<R>;
+  attachment: AttachmentOption<R>;
   boolean: BooleanOption<R>;
-  user: UserOption<R>;
   channel: ChannelOption<R>;
-  role: RoleOption<R>;
+  integer: IntegerOption<R>;
   mentionable: MentionableOption<R>;
   number: NumberOption<R>;
-  attachment: AttachmentOption<R>;
+  role: RoleOption<R>;
+  string: StringOption<R>;
+  user: UserOption<R>;
 }
 
+export type ApplicationCommandOptionTypeName =
+  | "attachment"
+  | "boolean"
+  | "channel"
+  | "integer"
+  | "mentionable"
+  | "number"
+  | "role"
+  | "string"
+  | "user";
+
 export const OptionTypeMap = {
-  string: StringOption,
-  integer: IntegerOption,
+  attachment: AttachmentOption,
   boolean: BooleanOption,
-  user: UserOption,
   channel: ChannelOption,
-  role: RoleOption,
+  integer: IntegerOption,
   mentionable: MentionableOption,
   number: NumberOption,
-  attachment: AttachmentOption,
+  role: RoleOption,
+  string: StringOption,
+  user: UserOption,
 } as const;
 
 export function defineOption<
   T extends ApplicationCommandOptionTypeName,
   const O extends ApplicationCommandOptionsByType<any>[T],
-  R extends ApplicationCommandOptionsReturnByType<IsRequired<O>>[T]
+  R extends ApplicationCommandOptionsReturnByType<IsRequired<O>>[T],
 >(type: T, options: O): R {
   const Constructor = OptionTypeMap[type] as new (options: O) => R;
 

@@ -1,4 +1,5 @@
 import type { ApplicationCommandOptionType } from "discord.js";
+
 import type {
   AttachmentOption,
   AttachmentOptionAPI,
@@ -24,61 +25,13 @@ import type {
   UserOptionAPI,
 } from "../builders/options";
 
-export type ApplicationCommandOptionWithRequired<
-  R extends boolean | undefined = undefined
-> = {
-  required?: R;
-};
-
 /**
  * @see https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-option-choice-structure
  */
-export type ApplicationCommandOptionChoice<T = string | number> = {
+export type ApplicationCommandOptionChoice<T = number | string> = {
   name: string;
   value: T;
 };
-
-export interface ApplicationCommandOptionWithChoices<T = string | number> {
-  choices?: ApplicationCommandOptionChoice<T>[];
-}
-
-export interface ApplicationCommandOptionWithAutocomplete {
-  autocomplete?: boolean;
-}
-
-export interface ApplicationCommandOptionWithMinMaxValues {
-  min_value?: number;
-  max_value?: number;
-}
-
-export type SimpleOptionAPI =
-  | StringOptionAPI
-  | IntegerOptionAPI
-  | BooleanOptionAPI
-  | UserOptionAPI
-  | ChannelOptionAPI
-  | RoleOptionAPI
-  | MentionableOptionAPI
-  | NumberOptionAPI
-  | AttachmentOptionAPI;
-
-export type CommandOptionAPI =
-  | SimpleOptionAPI
-  | SubcommandOptionAPI
-  | SubcommandGroupOptionAPI;
-
-export type SimpleOption<Required extends boolean = boolean> =
-  | StringOption<Required>
-  | IntegerOption<Required>
-  | BooleanOption<Required>
-  | UserOption<Required>
-  | ChannelOption<Required>
-  | RoleOption<Required>
-  | MentionableOption<Required>
-  | NumberOption<Required>
-  | AttachmentOption<Required>;
-
-export type Option = SimpleOption | SubcommandOption | SubcommandGroupOption;
 
 export interface ApplicationCommandOptionMap {
   [ApplicationCommandOptionType.Attachment]: AttachmentOption;
@@ -90,6 +43,54 @@ export interface ApplicationCommandOptionMap {
   [ApplicationCommandOptionType.Role]: RoleOption;
   [ApplicationCommandOptionType.String]: StringOption;
   [ApplicationCommandOptionType.Subcommand]: SubcommandOption;
-  [ApplicationCommandOptionType.User]: UserOption;
   [ApplicationCommandOptionType.SubcommandGroup]: SubcommandGroupOption;
+  [ApplicationCommandOptionType.User]: UserOption;
 }
+
+export interface ApplicationCommandOptionWithAutocomplete {
+  autocomplete?: boolean;
+}
+
+export interface ApplicationCommandOptionWithChoices<T = number | string> {
+  choices?: ApplicationCommandOptionChoice<T>[];
+}
+
+export interface ApplicationCommandOptionWithMinMaxValues {
+  max_value?: number;
+  min_value?: number;
+}
+
+export type ApplicationCommandOptionWithRequired<
+  R extends boolean | undefined = undefined,
+> = {
+  required?: R;
+};
+
+export type CommandOptionAPI =
+  | SimpleOptionAPI
+  | SubcommandGroupOptionAPI
+  | SubcommandOptionAPI;
+
+export type Option = SimpleOption | SubcommandGroupOption | SubcommandOption;
+
+export type SimpleOption<Required extends boolean = boolean> =
+  | AttachmentOption<Required>
+  | BooleanOption<Required>
+  | ChannelOption<Required>
+  | IntegerOption<Required>
+  | MentionableOption<Required>
+  | NumberOption<Required>
+  | RoleOption<Required>
+  | StringOption<Required>
+  | UserOption<Required>;
+
+export type SimpleOptionAPI =
+  | AttachmentOptionAPI
+  | BooleanOptionAPI
+  | ChannelOptionAPI
+  | IntegerOptionAPI
+  | MentionableOptionAPI
+  | NumberOptionAPI
+  | RoleOptionAPI
+  | StringOptionAPI
+  | UserOptionAPI;

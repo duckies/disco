@@ -6,9 +6,9 @@ export * from "./builders/options";
 export * from "./client";
 export * from "./commander";
 export * from "./errors";
-export * from "./types";
-export * from "./utils";
 export * from "./hooks";
-
 // TODO: Move to its own export file.
 export { syncCommands } from "./scripts/sync";
+export * from "./types";
+
+export * from "./utils";

@@ -5,13 +5,13 @@ const envSchema = z.object({
     BOT_TOKEN: z.string(),
   }),
   GUILD: z.object({
+    CHANNELS: z.object({
+      NOTIFICATIONS: z.string().optional(),
+      ON_MESSAGE_REMOVE: z.string().optional(),
+    }),
     ID: z.string(),
     MESSAGE_CACHE: z.string().array().optional(),
-    CHANNELS: z.object({
-      ON_MESSAGE_REMOVE: z.string().optional(),
-      NOTIFICATIONS: z.string().optional()
-    })
-  })
+  }),
 });
 
 export const env = envSchema.parse({
@@ -19,11 +19,11 @@ export const env = envSchema.parse({
     BOT_TOKEN: process.env.DISCORD_BOT_TOKEN,
   },
   GUILD: {
-    ID: process.env.GUILD_ID,
-    MESSAGE_CACHE: process.env.GUILD_CHANNELS_MESSAGE_CACHE?.split(','),
     CHANNELS: {
+      NOTIFICATIONS: process.env.GUILD_CHANNELS_NOTIFICATIONS,
       ON_MESSAGE_REMOVE: process.env.GUILD_CHANNELS_ON_MESSAGE_REMOVE,
-      NOTIFICATIONS: process.env.GUILD_CHANNELS_NOTIFICATIONS
-    }
-  }
+    },
+    ID: process.env.GUILD_ID,
+    MESSAGE_CACHE: process.env.GUILD_CHANNELS_MESSAGE_CACHE?.split(","),
+  },
 });

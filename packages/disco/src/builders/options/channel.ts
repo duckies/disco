@@ -1,13 +1,15 @@
 import { ApplicationCommandOptionType } from "discord.js";
-import {
-  ApplicationCommandOptionBase,
-  type ApplicationCommandOptionAPIBase,
-} from "../command-option";
+
 import type {
   ApplicationCommandOptionWithRequired,
   NonPartial,
 } from "../../types";
+
 import { applyMixins } from "../../utils/mixins";
+import {
+  type ApplicationCommandOptionAPIBase,
+  ApplicationCommandOptionBase,
+} from "../command-option";
 import { RequiredMixin } from "./mixins/required";
 
 /**
@@ -29,35 +31,35 @@ export enum ChannelType {
   GuildMedia,
 }
 
+export interface ChannelOption<R extends boolean> extends RequiredMixin<R> {}
+
 export interface ChannelOptionAPI<
-  R extends boolean | undefined = boolean | undefined
+  R extends boolean | undefined = boolean | undefined,
 > extends ApplicationCommandOptionAPIBase<ApplicationCommandOptionType.Channel>,
-    ApplicationCommandOptionWithRequired<R> {
-  type: ApplicationCommandOptionType.Channel;
+  ApplicationCommandOptionWithRequired<R> {
   channel_types?: ChannelType[];
+  type: ApplicationCommandOptionType.Channel;
 }
 
 export interface ChannelOptionOptions<R extends boolean = false>
   extends Omit<ChannelOptionAPI<R>, "type"> {}
 
-export interface ChannelOption<R extends boolean> extends RequiredMixin<R> {}
-
 export class ChannelOption<
-  R extends boolean = false
+  R extends boolean = false,
 > extends ApplicationCommandOptionBase {
-  public readonly type = ApplicationCommandOptionType.Channel;
   public readonly channel_types?: ChannelType[];
+  public readonly type = ApplicationCommandOptionType.Channel;
 
-  constructor({ name, description, ...options }: ChannelOptionOptions<R>) {
-    super({ name, description });
+  constructor({ description, name, ...options }: ChannelOptionOptions<R>) {
+    super({ description, name });
     Object.assign(this, options);
   }
 
   public override toJSON(): NonPartial<ChannelOptionAPI<R>> {
     return {
       ...super.toJSON(),
-      required: this.required,
       channel_types: this.channel_types,
+      required: this.required,
     };
   }
 }

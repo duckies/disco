@@ -1,4 +1,5 @@
 import type { Option, Params } from "../../types";
+
 import {
   SubcommandOption,
   type SubcommandOptionOptions,
@@ -8,7 +9,7 @@ export class SubcommandMixin {
   public readonly options!: Map<string, Option>;
 
   public addSubCommand<const P extends Params>(
-    options: SubcommandOptionOptions<P>
+    options: SubcommandOptionOptions<P>,
   ) {
     const option = new SubcommandOption(options);
 

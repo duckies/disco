@@ -1,4 +1,5 @@
 import { ApplicationCommandOptionType } from "discord.js";
+
 import type {
   ApplicationCommandOptionWithAutocomplete,
   ApplicationCommandOptionWithChoices,
@@ -6,44 +7,45 @@ import type {
   ApplicationCommandOptionWithRequired,
   NonPartial,
 } from "../../types";
+
 import { applyMixins } from "../../utils/mixins";
 import {
-  ApplicationCommandOptionBase,
   type ApplicationCommandOptionAPIBase,
+  ApplicationCommandOptionBase,
 } from "../command-option";
 import { AutocompleteMixin } from "./mixins/autocomplete";
 import { ChoicesMixin } from "./mixins/choices";
 import { MinMaxMixin } from "./mixins/minmax";
 import { RequiredMixin } from "./mixins/required";
 
+export interface NumberOption<R extends boolean>
+  extends AutocompleteMixin,
+  ChoicesMixin<number>,
+  MinMaxMixin,
+  RequiredMixin<R> {}
+
 export interface NumberOptionAPI<
-  R extends boolean | undefined = boolean | undefined
+  R extends boolean | undefined = boolean | undefined,
 > extends ApplicationCommandOptionAPIBase<ApplicationCommandOptionType.Number>,
-    ApplicationCommandOptionWithRequired<R>,
-    ApplicationCommandOptionWithChoices<number>,
-    ApplicationCommandOptionWithAutocomplete,
-    ApplicationCommandOptionWithMinMaxValues {
+  ApplicationCommandOptionWithAutocomplete,
+  ApplicationCommandOptionWithChoices<number>,
+  ApplicationCommandOptionWithMinMaxValues,
+  ApplicationCommandOptionWithRequired<R> {
   type: ApplicationCommandOptionType.Number;
 }
 
 export interface NumberOptionOptions<R extends boolean>
   extends Omit<NumberOptionAPI<R>, "type"> {}
 
-export interface NumberOption<R extends boolean>
-  extends RequiredMixin<R>,
-    ChoicesMixin<number>,
-    AutocompleteMixin,
-    MinMaxMixin {}
-
 export class NumberOption<
-  R extends boolean = false
+  R extends boolean = false,
 > extends ApplicationCommandOptionBase {
   public readonly type = ApplicationCommandOptionType.Number;
 
-  constructor({ name, description, ...options }: NumberOptionOptions<R>) {
+  constructor({ description, name, ...options }: NumberOptionOptions<R>) {
     super({
-      name,
       description,
+      name,
     });
     Object.assign(this, options);
   }
@@ -51,11 +53,11 @@ export class NumberOption<
   public override toJSON(): NonPartial<NumberOptionAPI<R>> {
     return {
       ...super.toJSON(),
-      required: this.required,
       autocomplete: this.autocomplete,
       choices: this.choices,
-      min_value: this.min_value,
       max_value: this.max_value,
+      min_value: this.min_value,
+      required: this.required,
     };
   }
 }

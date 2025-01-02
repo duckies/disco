@@ -1,35 +1,37 @@
 import { ApplicationCommandOptionType } from "discord.js";
+
 import type {
   ApplicationCommandOptionWithRequired,
   NonPartial,
 } from "../../types";
+
 import { applyMixins } from "../../utils/mixins";
 import {
-  ApplicationCommandOptionBase,
   type ApplicationCommandOptionAPIBase,
+  ApplicationCommandOptionBase,
 } from "../command-option";
 import { RequiredMixin } from "./mixins/required";
 
+export interface AttachmentOption<R extends boolean = false>
+  extends RequiredMixin<R> {}
+
 export interface AttachmentOptionAPI<
-  R extends boolean | undefined = boolean | undefined
+  R extends boolean | undefined = boolean | undefined,
 > extends ApplicationCommandOptionAPIBase<ApplicationCommandOptionType.Attachment>,
-    ApplicationCommandOptionWithRequired<R> {
+  ApplicationCommandOptionWithRequired<R> {
   type: ApplicationCommandOptionType.Attachment;
 }
 
 export interface AttachmentOptionOptions<R extends boolean = false>
   extends Omit<AttachmentOptionAPI<R>, "type"> {}
 
-export interface AttachmentOption<R extends boolean = false>
-  extends RequiredMixin<R> {}
-
 export class AttachmentOption<
-  R extends boolean = false
+  R extends boolean = false,
 > extends ApplicationCommandOptionBase {
   public readonly type = ApplicationCommandOptionType.Attachment;
 
-  constructor({ name, description, ...options }: AttachmentOptionOptions<R>) {
-    super({ name, description });
+  constructor({ description, name, ...options }: AttachmentOptionOptions<R>) {
+    super({ description, name });
     Object.assign(this, options);
   }
 

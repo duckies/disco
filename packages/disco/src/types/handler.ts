@@ -6,21 +6,22 @@ import type {
   Role,
   User,
 } from "discord.js";
+
 import type { Option, SimpleOption } from "./application-commands";
 import type { Simplify } from "./utility";
 
 export interface ApplicationCommandOptionParameterType {
+  [ApplicationCommandOptionType.Attachment]: Attachment;
+  [ApplicationCommandOptionType.Boolean]: boolean;
+  [ApplicationCommandOptionType.Channel]: Channel;
+  [ApplicationCommandOptionType.Integer]: number;
+  [ApplicationCommandOptionType.Mentionable]: Role | User;
+  [ApplicationCommandOptionType.Number]: number;
+  [ApplicationCommandOptionType.Role]: Role;
+  [ApplicationCommandOptionType.String]: string;
   [ApplicationCommandOptionType.Subcommand]: never;
   [ApplicationCommandOptionType.SubcommandGroup]: never;
-  [ApplicationCommandOptionType.String]: string;
-  [ApplicationCommandOptionType.Integer]: number;
-  [ApplicationCommandOptionType.Boolean]: boolean;
   [ApplicationCommandOptionType.User]: User;
-  [ApplicationCommandOptionType.Channel]: Channel;
-  [ApplicationCommandOptionType.Role]: Role;
-  [ApplicationCommandOptionType.Mentionable]: User | Role;
-  [ApplicationCommandOptionType.Number]: number;
-  [ApplicationCommandOptionType.Attachment]: Attachment;
 }
 
 // export interface OptionTypeMap {
@@ -37,7 +38,14 @@ export interface ApplicationCommandOptionParameterType {
 //   ApplicationCommandAttachmentOption: Attachment;
 // }
 
-export type Params = Record<string, SimpleOption>;
+export type Handler<P extends Params> = (
+  context: InteractionContext<P>
+) => Promise<unknown>;
+
+export interface InteractionContext<P extends Params> {
+  interaction: ChatInputCommandInteraction;
+  params: ParamResult<P>;
+}
 
 export type OptionType<O extends Option> = O extends {
   type: infer T extends ApplicationCommandOptionType;
@@ -51,21 +59,14 @@ export type ParamRequired<T extends Option> = T extends SimpleOption<infer R>
 
 export type ParamResult<P extends Params> = Simplify<
   {
-    [K in keyof P as ParamRequired<P[K]> extends true ? K : never]: OptionType<
-      P[K]
-    >;
-  } & {
     [K in keyof P as ParamRequired<P[K]> extends false
       ? K
       : never]?: OptionType<P[K]>;
+  } & {
+    [K in keyof P as ParamRequired<P[K]> extends true ? K : never]: OptionType<
+      P[K]
+    >;
   }
 >;
 
-export interface InteractionContext<P extends Params> {
-  interaction: ChatInputCommandInteraction;
-  params: ParamResult<P>;
-}
-
-export type Handler<P extends Params> = (
-  ctx: InteractionContext<P>
-) => Promise<unknown>;
+export type Params = Record<string, SimpleOption>;

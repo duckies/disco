@@ -1,4 +1,5 @@
-import { describe, test, expect, vi } from "vitest";
+import { describe, expect, test, vi } from "vitest";
+
 import { Emitter } from "./emitter";
 
 interface TestEmitter {

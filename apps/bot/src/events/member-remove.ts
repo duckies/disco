@@ -1,5 +1,7 @@
-import { defineEventListener } from "@repo/disco";
 import type { APIEmbed } from "discord.js";
+
+import { defineEventListener } from "@repo/disco";
+
 import { COLORS } from "../constants";
 import { env } from "../env";
 
@@ -13,22 +15,23 @@ export const onMemberRemove = defineEventListener({
     if (!channel) {
       console.warn("No notification channel found for member removal.");
       return;
-    } else if (!channel.isTextBased()) {
+    }
+    else if (!channel.isTextBased()) {
       console.warn("Notification channel is not text-based.");
       return;
     }
 
     const embed = {
-      title: "Member Left",
       color: COLORS.VIVA_MAGENTA,
-      timestamp: new Date().toISOString(),
       fields: [
-        { name: "User", value: member.user.toString(), inline: true },
-        { name: "Username", value: member.user.username, inline: true },
-        { name: "Roles", value: member.roles.cache.map(r => r.toString()).join(", "), inline: true },
+        { inline: true, name: "User", value: member.user.toString() },
+        { inline: true, name: "Username", value: member.user.username },
+        { inline: true, name: "Roles", value: member.roles.cache.map(r => r.toString()).join(", ") },
       ],
-    } satisfies APIEmbed
+      timestamp: new Date().toISOString(),
+      title: "Member Left",
+    } satisfies APIEmbed;
 
-    await channel.send({ embeds: [embed]})
-  }
-})
+    await channel.send({ embeds: [embed] });
+  },
+});

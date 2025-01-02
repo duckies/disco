@@ -1,36 +1,41 @@
 import js from "@eslint/js";
-import ts from "typescript-eslint";
+import stylistic from "@stylistic/eslint-plugin";
+import importX from "eslint-plugin-import-x";
+import perfectionist from "eslint-plugin-perfectionist";
 import unicorn from "eslint-plugin-unicorn";
-import * as importPlugin from "eslint-plugin-import-x";
+import ts from "typescript-eslint";
 
 export default ts.config(
-  {
-    ignores: ["**/dist/**"],
-  },
   js.configs.recommended,
-  ...ts.configs.recommendedTypeChecked,
-  ...ts.configs.stylisticTypeChecked,
+  ts.configs.recommendedTypeChecked,
+  ts.configs.stylisticTypeChecked,
+  importX.flatConfigs.recommended,
+  importX.flatConfigs.typescript,
+  perfectionist.configs["recommended-natural"],
+  unicorn.configs["flat/recommended"],
+  stylistic.configs.customize({
+    indent: 2,
+    quotes: "double",
+    semi: true,
+  }),
   {
+    languageOptions: {
+      ecmaVersion: "latest",
+      parserOptions: {
+        project: ["./tsconfig.base.json", "./apps/*/tsconfig.json", "./packages/*/tsconfig.json"],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      sourceType: "module",
+    },
     rules: {
-      yoda: ["error"],
+      "@typescript-eslint/ban-ts-comment": "error",
+      "@typescript-eslint/consistent-type-definitions": ["off"],
       "@typescript-eslint/consistent-type-imports": [
         "error",
         {
           fixStyle: "inline-type-imports",
         },
       ],
-      "@typescript-eslint/consistent-type-definitions": ["off"],
-      "@typescript-eslint/no-unsafe-declaration-merging": ["off"],
-      "@typescript-eslint/no-unsafe-argument": ["off"],
-      "@typescript-eslint/no-unsafe-member-access": ["off"],
-      "@typescript-eslint/no-explicit-any": ["off"],
-      "@typescript-eslint/no-empty-object-type": [
-        "error",
-        {
-          allowInterfaces: "with-single-extends",
-        },
-      ],
-      "@typescript-eslint/no-empty-function": ["off"],
       "@typescript-eslint/explicit-member-accessibility": [
         "error",
         {
@@ -40,36 +45,23 @@ export default ts.config(
         },
       ],
       "@typescript-eslint/method-signature-style": ["error", "property"],
-      "@typescript-eslint/no-import-type-side-effects": ["error"],
-      "@typescript-eslint/ban-ts-comment": "error",
-      "@typescript-eslint/no-this-alias": ["off"],
-    },
-  },
-  {
-    name: "imports",
-    plugins: {
-      import: importPlugin,
-      unicorn,
-    },
-    rules: {
-      "import/first": "error",
-      "import/no-duplicates": "error",
-      "import/no-mutable-exports": "error",
-      "import/no-named-default": "error",
-      "import/no-self-import": "error",
-      "import/no-webpack-loader-syntax": "error",
-      "import/order": "error",
-    },
-  },
-  {
-    languageOptions: {
-      parserOptions: {
-        projectService: {
-          allowDefaultProject: ["./*.js", "./*.mjs", "./*.cjs"],
-          defaultProject: "./tsconfig.base.json",
+      "@typescript-eslint/no-empty-function": ["off"],
+      "@typescript-eslint/no-empty-object-type": [
+        "error",
+        {
+          allowInterfaces: "with-single-extends",
         },
-        tsconfigRootDir: import.meta.dirname,
-      },
+      ],
+      "@typescript-eslint/no-explicit-any": ["off"],
+      "@typescript-eslint/no-import-type-side-effects": ["error"],
+      "@typescript-eslint/no-this-alias": ["off"],
+      "@typescript-eslint/no-unsafe-argument": ["off"],
+      "@typescript-eslint/no-unsafe-declaration-merging": ["off"],
+      "@typescript-eslint/no-unsafe-member-access": ["off"],
+      "import-x/no-named-as-default-member": ["off"],
+      "unicorn/no-null": ["off"],
+      "unicorn/prevent-abbreviations": ["off"],
+      "yoda": ["error"],
     },
-  }
+  },
 );

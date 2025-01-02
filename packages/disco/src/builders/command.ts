@@ -1,4 +1,5 @@
-import { ApplicationCommandType } from "discord.js";
+import type { ApplicationCommandType } from "discord.js";
+
 import type { NonPartial } from "../types";
 
 /**
@@ -11,9 +12,9 @@ export enum InteractionContextType {
 }
 
 export interface ApplicationCommandAPIBase {
-  type: ApplicationCommandType;
-  name: string;
   contexts?: InteractionContextType[];
+  name: string;
+  type: ApplicationCommandType;
 }
 
 /**
@@ -22,9 +23,9 @@ export interface ApplicationCommandAPIBase {
  * @see https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-structure
  */
 export abstract class Command {
-  public readonly type!: ApplicationCommandType;
-  public readonly name!: string;
   public readonly contexts?: InteractionContextType[];
+  public readonly name!: string;
+  public readonly type!: ApplicationCommandType;
 
   constructor(options: ApplicationCommandAPIBase) {
     this.type = options.type;
@@ -34,11 +35,11 @@ export abstract class Command {
 
   public toJSON(): NonPartial<ApplicationCommandAPIBase> {
     return {
-      type: this.type,
-      name: this.name,
       contexts: this.contexts,
+      name: this.name,
+      type: this.type,
     };
   }
 }
 
-export { ApplicationCommandType };
+export { ApplicationCommandType } from "discord.js";

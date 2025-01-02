@@ -1,4 +1,5 @@
 import { ApplicationCommandOptionType } from "discord.js";
+
 import type {
   Handler,
   NonPartial,
@@ -6,51 +7,52 @@ import type {
   SimpleOption,
   SimpleOptionAPI,
 } from "../../types";
+
 import { applyMixins } from "../../utils";
 import {
-  ApplicationCommandOptionBase,
   type ApplicationCommandOptionAPIBase,
+  ApplicationCommandOptionBase,
 } from "../command-option";
 import { OptionsMixin } from "../mixins/options-mixin";
 
+export interface SubcommandOption extends OptionsMixin<SimpleOption> {}
+
 export interface SubcommandOptionAPI
   extends ApplicationCommandOptionAPIBase<ApplicationCommandOptionType.Subcommand> {
-  type: ApplicationCommandOptionType.Subcommand;
   options?: SimpleOptionAPI[];
+  type: ApplicationCommandOptionType.Subcommand;
 }
 
 export interface SubcommandOptionOptions<P extends Params>
-  extends Omit<SubcommandOptionAPI, "type" | "options"> {
-  options?: P;
+  extends Omit<SubcommandOptionAPI, "options" | "type"> {
   handler?: Handler<P>;
+  options?: P;
 }
 
-export interface SubcommandOption extends OptionsMixin<SimpleOption> {}
-
 export class SubcommandOption<
-  const P extends Params = any
+  const P extends Params = any,
 > extends ApplicationCommandOptionBase {
-  public readonly type = ApplicationCommandOptionType.Subcommand;
   public readonly handler?: Handler<P>;
   public readonly options = new Map<string, SimpleOption>();
+  public readonly type = ApplicationCommandOptionType.Subcommand;
 
   constructor({
-    name,
     description,
     handler,
+    name,
     options,
   }: SubcommandOptionOptions<P>) {
-    super({ name, description });
+    super({ description, name });
 
     this.handler = handler;
 
-    Object.values(options ?? {}).forEach(o => this.addOption(o))
+    for (const o of Object.values(options ?? {})) this.addOption(o);
   }
 
   public override toJSON(): NonPartial<SubcommandOptionAPI> {
     return {
       ...super.toJSON(),
-      options: [...this.options.values()].map((o) => o.toJSON()),
+      options: [...this.options.values()].map(o => o.toJSON()),
     };
   }
 

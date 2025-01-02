@@ -1,13 +1,12 @@
 import type { ClientEvents } from "discord.js";
 
+export type EventListener<E extends keyof ClientEvents = any> = EventListenerOptions<E>;
 
 export interface EventListenerOptions<E extends keyof ClientEvents> {
-  event: E,
-  once?: boolean,
-  listener: (...args: ClientEvents[E]) => unknown
+  event: E;
+  listener: (...args: ClientEvents[E]) => unknown;
+  once?: boolean;
 }
-
-export type EventListener<E extends keyof ClientEvents = any> = EventListenerOptions<E>;
 
 /**
  * Creates the structure for defining an event listener. This currently is no different than
@@ -16,7 +15,7 @@ export type EventListener<E extends keyof ClientEvents = any> = EventListenerOpt
 export function defineEventListener<E extends keyof ClientEvents>(options: EventListenerOptions<E>): EventListener<E> {
   return {
     event: options.event,
-    once: options.once,
     listener: options.listener,
-  }
+    once: options.once,
+  };
 }

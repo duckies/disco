@@ -1,19 +1,23 @@
 import { ApplicationCommandOptionType } from "discord.js";
+
 import type {
   ApplicationCommandOptionWithRequired,
   NonPartial,
 } from "../../types";
+
 import { applyMixins } from "../../utils/mixins";
 import {
-  ApplicationCommandOptionBase,
   type ApplicationCommandOptionAPIBase,
+  ApplicationCommandOptionBase,
 } from "../command-option";
 import { RequiredMixin } from "./mixins/required";
 
+export interface UserOption<R extends boolean> extends RequiredMixin<R> {}
+
 export interface UserOptionAPI<
-  R extends boolean | undefined = boolean | undefined
+  R extends boolean | undefined = boolean | undefined,
 > extends ApplicationCommandOptionAPIBase<ApplicationCommandOptionType.User>,
-    ApplicationCommandOptionWithRequired<R> {
+  ApplicationCommandOptionWithRequired<R> {
   type: ApplicationCommandOptionType.User;
 }
 
@@ -22,15 +26,13 @@ export type UserOptionOptions<R extends boolean> = Omit<
   "type"
 >;
 
-export interface UserOption<R extends boolean> extends RequiredMixin<R> {}
-
 export class UserOption<
-  R extends boolean = false
+  R extends boolean = false,
 > extends ApplicationCommandOptionBase {
   public readonly type = ApplicationCommandOptionType.User;
 
-  constructor({ name, description, ...options }: UserOptionOptions<R>) {
-    super({ name, description });
+  constructor({ description, name, ...options }: UserOptionOptions<R>) {
+    super({ description, name });
     Object.assign(this, options);
   }
 
